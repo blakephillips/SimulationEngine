@@ -29,8 +29,8 @@ public class TileSelector {
         entity.add(new MousePositionComponent(new Vector2(0,0)));
         entity.add(new FollowMouseComponent());
         entity.add(new SnapPositionComponent(16, 16));
-        entity.add(new CenterPositionComponent(new Vector2(0,0)));
-        entity.add(new TextComponent("This is text"));
+        entity.add(new CenterPositionComponent(mouseRegion.getRegionWidth(), mouseRegion.getRegionHeight()));
+        entity.add(new TextComponent(""));
         entity.add(new DisplayPositionComponent());
 
         engine.addEntity(entity);

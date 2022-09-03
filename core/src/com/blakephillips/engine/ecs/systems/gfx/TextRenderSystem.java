@@ -21,6 +21,8 @@ public class TextRenderSystem extends IteratingSystem {
     public TextRenderSystem(SpriteBatch batch) {
         super(Family.all(TextComponent.class, PositionComponent.class).get());
         this.batch = batch;
+
+        font.getData().setScale(0.55f, 0.55f);
     }
 
     @Override

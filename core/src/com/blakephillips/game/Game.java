@@ -18,7 +18,9 @@ import com.blakephillips.engine.ecs.systems.mouse.FollowMousePositionSystem;
 import com.blakephillips.engine.ecs.systems.mouse.MousePositionSystem;
 import com.blakephillips.engine.ecs.systems.position.CenterPositionSystem;
 import com.blakephillips.engine.ecs.systems.position.MovementSystem;
+import com.blakephillips.engine.ecs.systems.position.OffsetPositionSystem;
 import com.blakephillips.engine.ecs.systems.position.SnapPositionSystem;
+import com.blakephillips.engine.utilities.grid.GraphManager;
 import com.blakephillips.engine.utilities.grid.Grid;
 import com.blakephillips.game.ui.TileSelector;
 
@@ -42,7 +44,10 @@ public class Game extends ApplicationAdapter {
 		engine = new Engine();
 		batch.enableBlending();
 
-		grid = new Grid(300, 300, 16, 1, camera);
+		int gridHeight = 300;
+		int gridWidth = 300;
+
+		grid = new Grid(gridHeight, gridWidth, 16, 1, camera);
 		engine.addSystem(new TilemapRenderSystem(camera, grid.tileMapRenderer));
 		engine.addSystem(new RenderSystem(batch));
 		engine.addSystem(new TextRenderSystem(batch));
@@ -50,8 +55,9 @@ public class Game extends ApplicationAdapter {
 		engine.addSystem(new MousePositionSystem(viewport));
 		engine.addSystem(new CenterPositionSystem());
 		engine.addSystem(new SnapPositionSystem());
+		engine.addSystem(new OffsetPositionSystem());
 		engine.addSystem(new MovementSystem());
-		engine.addSystem(new PathfindingSystem(grid.tileMap));
+		engine.addSystem(new PathfindingSystem(grid.tileMap, new GraphManager(gridWidth, gridHeight)));
 
 		new TileSelector(engine);
 		new Character(new Vector2(30, 30), engine);

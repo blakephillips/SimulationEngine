@@ -1,12 +1,12 @@
 package com.blakephillips.engine.ecs.components;
 
 import com.badlogic.ashley.core.Component;
-import com.blakephillips.engine.utilities.grid.Tile;
+import com.blakephillips.engine.utilities.grid.Vertex;
 
 public class PathfindingComponent implements Component {
-    public Tile destination;
+    public Vertex destination;
 
-    public PathfindingComponent(Tile destination) {
+    public PathfindingComponent(Vertex destination) {
         this.destination = destination;
     }
 
