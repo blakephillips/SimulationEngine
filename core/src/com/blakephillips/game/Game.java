@@ -57,7 +57,7 @@ public class Game extends ApplicationAdapter {
 		engine.addSystem(new SnapPositionSystem());
 		engine.addSystem(new OffsetPositionSystem());
 		engine.addSystem(new MovementSystem());
-		engine.addSystem(new PathfindingSystem(grid.tileMap, new GraphManager(gridWidth, gridHeight)));
+		engine.addSystem(new PathfindingSystem(grid.tileMap, new GraphManager(grid, gridWidth, gridHeight)));
 
 		new TileSelector(engine);
 		new Character(new Vector2(30, 30), engine);

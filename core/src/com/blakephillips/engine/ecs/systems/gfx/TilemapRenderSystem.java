@@ -9,10 +9,10 @@ import com.blakephillips.engine.utilities.grid.Grid;
 
 public class TilemapRenderSystem extends EntitySystem {
 
+    public Grid grid;
     private float unitScale;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
-    private Grid grid;
 
     public TilemapRenderSystem(OrthographicCamera camera, OrthogonalTiledMapRenderer renderer) {
         this.camera = camera;

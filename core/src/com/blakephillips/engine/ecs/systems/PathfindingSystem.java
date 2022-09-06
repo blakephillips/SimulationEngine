@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.blakephillips.engine.ecs.components.TextComponent;
 import com.blakephillips.engine.ecs.components.position.OffsetPositionComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
+import com.blakephillips.engine.ecs.systems.gfx.TilemapRenderSystem;
 import com.blakephillips.engine.ecs.systems.mouse.MousePositionSystem;
 import com.blakephillips.engine.utilities.grid.GraphManager;
 import com.blakephillips.engine.utilities.grid.Vertex;
@@ -40,7 +41,6 @@ public class PathfindingSystem extends EntitySystem {
     @Override
     public void update(float deltaTime) {
 
-
         //temporary wall creation to test A*
         if (Gdx.input.isTouched()) {
             v2pos = getEngine().getSystem(MousePositionSystem.class).unprojectedMousePos();
@@ -48,11 +48,11 @@ public class PathfindingSystem extends EntitySystem {
             TiledMapTileLayer collision = (TiledMapTileLayer)tileMap.getLayers().get("collision");
 
             Vertex vertex = worldToCellIndex(v2pos);
-            graphManager.graph.removeEdges(graphManager.graph.getEdges(vertex));
+            graphManager.graph.disconnect(vertex);
 
             Cell cell = new Cell();
             cell.setTile(new StaticTiledMapTile(region));
-            collision.setCell((int)vertex.x, (int)vertex.y, cell);
+            collision.setCell(vertex.x, vertex.y, cell);
         }
 
         if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
@@ -83,6 +83,11 @@ public class PathfindingSystem extends EntitySystem {
 
         }
 
+    }
+
+    public boolean obstacle(Vertex v) {
+        TilemapRenderSystem tileSystem = getEngine().getSystem(TilemapRenderSystem.class);
+        return tileSystem.grid.obstacle(v);
     }
 
     public Vertex worldToCellIndex(Vector2 pos) {

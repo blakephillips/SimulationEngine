@@ -19,8 +19,7 @@ public class Grid {
     private float cellSize;
 
     private OrthographicCamera camera;
-
-    //private Array<Array<Tile>> tileGrid;
+    private TiledMapTileLayer collisionLayer;
 
     public Grid(int height, int width, int cellSize, float unitScale, OrthographicCamera camera) {
         this.height = height;
@@ -45,9 +44,9 @@ public class Grid {
         }
         layers.add(layer);
 
-        TiledMapTileLayer collision = new TiledMapTileLayer(width, height, cellSize, cellSize);
-        collision.setName("collision");
-        layers.add(collision);
+        collisionLayer = new TiledMapTileLayer(width, height, cellSize, cellSize);
+        collisionLayer.setName("collision");
+        layers.add(collisionLayer);
 
         tileMapRenderer = new OrthogonalTiledMapRenderer(tileMap, unitScale);
     }
@@ -60,10 +59,8 @@ public class Grid {
         return width;
     }
 
-
-    public void render(float deltaTime) {
-        tileMapRenderer.setView(camera);
-        tileMapRenderer.render();
+    public boolean obstacle(Vertex v) {
+        return !(collisionLayer.getCell(v.x, v.y) == null);
     }
 
 }

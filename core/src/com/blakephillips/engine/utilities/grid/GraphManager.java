@@ -10,15 +10,18 @@ public class GraphManager {
     public Graph<Vertex> graph;
     private int graphHeight;
     private int graphWidth;
+    private Grid grid;
 
-    public GraphManager(int graphWidth, int graphHeight) {
+    public GraphManager(Grid grid, int graphWidth, int graphHeight) {
+
+        this.grid = grid;
 
         this.graphWidth = graphWidth;
         this.graphHeight = graphHeight;
 
         graph = new UndirectedGraph<>();
         for (int x = 0; x < graphWidth; x++) {
-            for (int y = 0; y < graphWidth; y++) {
+            for (int y = 0; y < graphHeight; y++) {
                 Vertex v = new Vertex(x, y);
 
                 graph.addVertex(v);
@@ -41,7 +44,8 @@ public class GraphManager {
 
         for (Vertex neighbor: directions) {
 
-            if (graph.contains(neighbor) && !graph.edgeExists(vertex, neighbor)) {
+            if (graph.contains(neighbor) && !graph.edgeExists(vertex, neighbor)
+                && !grid.obstacle(neighbor)) {
                 graph.addEdge(vertex, neighbor);
             }
         }

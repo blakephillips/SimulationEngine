@@ -6,6 +6,7 @@ public class Vertex {
 
     public int x;
     public int y;
+    public boolean obstacle = false;
 
     public Vertex(int x, int y) {
         this.x = x;
