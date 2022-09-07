@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.IntervalIteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.blakephillips.engine.ecs.components.PathComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
+import com.blakephillips.engine.utilities.grid.Pathfinding;
 import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.engine.utilities.grid.Vertex;
 
@@ -26,6 +27,11 @@ public class PathFollowingSystem extends IntervalIteratingSystem {
         PositionComponent pos = posComponents.get(entity);
         PathComponent path = pathComponents.get(entity);
 
+        //If a path was added with just a destination but no path (wooo convenience)
+        if (path.path == null) {
+            path.path = Pathfinding.getPath(pos.pos, path.destination, tileMap);
+        }
+
         if (path.path.isEmpty()) {
             entity.remove(PathComponent.class);
             return;
@@ -36,5 +42,9 @@ public class PathFollowingSystem extends IntervalIteratingSystem {
         Vector2 v2pos = tileMap.cellIndexToWorld(nextPos);
 
         pos.pos = v2pos;
+    }
+
+    public TileMap getTileMap() {
+        return tileMap;
     }
 }

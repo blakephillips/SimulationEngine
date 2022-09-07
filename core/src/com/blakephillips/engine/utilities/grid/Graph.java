@@ -29,6 +29,10 @@ public class Graph {
         }
     }
 
+    public UndirectedGraph<Vertex> getGraph() {
+        return graph;
+    }
+
     public void connectNeighbors(Vertex vertex) {
         int x = vertex.x;
         int y = vertex.y;

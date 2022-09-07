@@ -1,16 +1,22 @@
 package com.blakephillips.game;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.blakephillips.engine.ecs.components.TextureComponent;
+import com.blakephillips.engine.ecs.components.ai.StateComponent;
+import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.systems.PathFollowingSystem;
+import com.blakephillips.engine.ecs.systems.ai.StateSystem;
 import com.blakephillips.engine.ecs.systems.gfx.RenderSystem;
 import com.blakephillips.engine.ecs.systems.gfx.TextRenderSystem;
 import com.blakephillips.engine.ecs.systems.gfx.TilemapRenderSystem;
@@ -21,6 +27,8 @@ import com.blakephillips.engine.ecs.systems.position.MovementSystem;
 import com.blakephillips.engine.ecs.systems.position.OffsetPositionSystem;
 import com.blakephillips.engine.ecs.systems.position.SnapPositionSystem;
 import com.blakephillips.engine.utilities.grid.TileMap;
+import com.blakephillips.engine.utilities.sprite.SpriteSheet;
+import com.blakephillips.game.ai.HaulState;
 import com.blakephillips.game.ui.TileSelector;
 
 public class Game extends ApplicationAdapter {
@@ -40,7 +48,7 @@ public class Game extends ApplicationAdapter {
 
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		batch = new SpriteBatch();
-		engine = new Engine();
+		engine = Orchestrator.getEngine();
 		batch.enableBlending();
 
 		int gridHeight = 300;
@@ -59,9 +67,25 @@ public class Game extends ApplicationAdapter {
 		engine.addSystem(new MovementSystem());
 		engine.addSystem(new DebugSystem(tilemap, character.entity));
 		engine.addSystem(new PathFollowingSystem(tilemap));
+		engine.addSystem(new StateSystem());
 		new TileSelector(engine);
 
-		new Character(new Vector2(50, 50), engine);
+
+
+		//testing hauling
+		Entity c = new Character(new Vector2(50, 50), engine).entity;
+		Entity haulObject = new Entity();
+		SpriteSheet spriteSheet = new SpriteSheet("tileset_grassland.png", 16, 16);
+		TextureRegion spr = spriteSheet.getTextureFromTileMap(0, 8);
+
+		haulObject.add(new TextureComponent(spr, 0));
+		haulObject.add(new PositionComponent(new Vector2(250, 250)));
+
+		engine.addEntity(haulObject);
+
+		HaulState haulState = new HaulState(c, haulObject, new Vector2(50, 50));
+		c.add(new StateComponent(haulState));
+
 	}
 
 	@Override
