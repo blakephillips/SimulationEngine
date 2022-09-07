@@ -22,9 +22,7 @@ public class TileSelector {
         TextureRegion mouseRegion = new TextureRegion(new Texture(Gdx.files.internal("tile_selector.png")));
 
         entity = new Entity();
-
-        TextureComponent tex = new TextureComponent(mouseRegion, 1);
-        entity.add(tex);
+        entity.add(new TextureComponent(mouseRegion, 1));
         entity.add(new PositionComponent(new Vector2(0, 0)));
         entity.add(new MousePositionComponent(new Vector2(0,0)));
         entity.add(new FollowMouseComponent());

@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.blakephillips.engine.ecs.systems.PathfindingSystem;
+import com.blakephillips.engine.ecs.systems.PathFollowingSystem;
 import com.blakephillips.engine.ecs.systems.gfx.RenderSystem;
 import com.blakephillips.engine.ecs.systems.gfx.TextRenderSystem;
 import com.blakephillips.engine.ecs.systems.gfx.TilemapRenderSystem;
@@ -20,8 +20,7 @@ import com.blakephillips.engine.ecs.systems.position.CenterPositionSystem;
 import com.blakephillips.engine.ecs.systems.position.MovementSystem;
 import com.blakephillips.engine.ecs.systems.position.OffsetPositionSystem;
 import com.blakephillips.engine.ecs.systems.position.SnapPositionSystem;
-import com.blakephillips.engine.utilities.grid.GraphManager;
-import com.blakephillips.engine.utilities.grid.Grid;
+import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.game.ui.TileSelector;
 
 public class Game extends ApplicationAdapter {
@@ -30,7 +29,7 @@ public class Game extends ApplicationAdapter {
 	OrthographicCamera camera;
 	Viewport viewport;
 
-	Grid grid;
+	TileMap tilemap;
 
 	@Override
 	public void create () {
@@ -47,8 +46,9 @@ public class Game extends ApplicationAdapter {
 		int gridHeight = 300;
 		int gridWidth = 300;
 
-		grid = new Grid(gridHeight, gridWidth, 16, 1, camera);
-		engine.addSystem(new TilemapRenderSystem(camera, grid.tileMapRenderer));
+		Character character = new Character(new Vector2(5, 5), engine);
+		tilemap = new TileMap(gridHeight, gridWidth, 16, 1, camera);
+		engine.addSystem(new TilemapRenderSystem(camera, tilemap.tileMapRenderer));
 		engine.addSystem(new RenderSystem(batch));
 		engine.addSystem(new TextRenderSystem(batch));
 		engine.addSystem(new FollowMousePositionSystem());
@@ -57,10 +57,10 @@ public class Game extends ApplicationAdapter {
 		engine.addSystem(new SnapPositionSystem());
 		engine.addSystem(new OffsetPositionSystem());
 		engine.addSystem(new MovementSystem());
-		engine.addSystem(new PathfindingSystem(grid.tileMap, new GraphManager(grid, gridWidth, gridHeight)));
-
+		engine.addSystem(new DebugSystem(tilemap, character.entity));
+		engine.addSystem(new PathFollowingSystem(tilemap));
 		new TileSelector(engine);
-		new Character(new Vector2(30, 30), engine);
+
 		new Character(new Vector2(50, 50), engine);
 	}
 

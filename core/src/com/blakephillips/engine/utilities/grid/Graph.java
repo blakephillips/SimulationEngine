@@ -2,19 +2,18 @@ package com.blakephillips.engine.utilities.grid;
 
 
 import com.badlogic.gdx.utils.Array;
-import space.earlygrey.simplegraphs.Graph;
 import space.earlygrey.simplegraphs.UndirectedGraph;
 
-public class GraphManager {
+public class Graph {
 
-    public Graph<Vertex> graph;
+    public UndirectedGraph<Vertex> graph;
     private int graphHeight;
     private int graphWidth;
-    private Grid grid;
+    private TileMap tilemap;
 
-    public GraphManager(Grid grid, int graphWidth, int graphHeight) {
+    public Graph(TileMap tilemap, int graphWidth, int graphHeight) {
 
-        this.grid = grid;
+        this.tilemap = tilemap;
 
         this.graphWidth = graphWidth;
         this.graphHeight = graphHeight;
@@ -45,7 +44,7 @@ public class GraphManager {
         for (Vertex neighbor: directions) {
 
             if (graph.contains(neighbor) && !graph.edgeExists(vertex, neighbor)
-                && !grid.obstacle(neighbor)) {
+                && !tilemap.obstacle(neighbor)) {
                 graph.addEdge(vertex, neighbor);
             }
         }
