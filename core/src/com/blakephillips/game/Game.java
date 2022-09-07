@@ -12,8 +12,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.blakephillips.engine.ecs.components.TextureComponent;
 import com.blakephillips.engine.ecs.components.ai.StateComponent;
+import com.blakephillips.engine.ecs.components.gfx.DisplayFpsComponent;
+import com.blakephillips.engine.ecs.components.gfx.TextComponent;
+import com.blakephillips.engine.ecs.components.gfx.TextureComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.systems.PathFollowingSystem;
 import com.blakephillips.engine.ecs.systems.ai.StateSystem;
@@ -22,10 +24,7 @@ import com.blakephillips.engine.ecs.systems.gfx.TextRenderSystem;
 import com.blakephillips.engine.ecs.systems.gfx.TilemapRenderSystem;
 import com.blakephillips.engine.ecs.systems.mouse.FollowMousePositionSystem;
 import com.blakephillips.engine.ecs.systems.mouse.MousePositionSystem;
-import com.blakephillips.engine.ecs.systems.position.CenterPositionSystem;
-import com.blakephillips.engine.ecs.systems.position.MovementSystem;
-import com.blakephillips.engine.ecs.systems.position.OffsetPositionSystem;
-import com.blakephillips.engine.ecs.systems.position.SnapPositionSystem;
+import com.blakephillips.engine.ecs.systems.position.*;
 import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.engine.utilities.sprite.SpriteSheet;
 import com.blakephillips.game.ai.HaulState;
@@ -68,9 +67,15 @@ public class Game extends ApplicationAdapter {
 		engine.addSystem(new DebugSystem(tilemap, character.entity));
 		engine.addSystem(new PathFollowingSystem(tilemap));
 		engine.addSystem(new StateSystem());
+		engine.addSystem(new TextureDirectionSystem());
 		new TileSelector(engine);
 
-
+		//display fps
+		Entity fps = new Entity();
+		fps.add(new PositionComponent(new Vector2(30, 455)));
+		fps.add(new TextComponent(""));
+		fps.add(new DisplayFpsComponent());
+		engine.addEntity(fps);
 
 		//testing hauling
 		Entity c = new Character(new Vector2(50, 50), engine).entity;

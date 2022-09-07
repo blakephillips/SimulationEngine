@@ -5,7 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.blakephillips.engine.ecs.components.TextureComponent;
+import com.blakephillips.engine.ecs.components.gfx.TextureComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 
 import java.util.Comparator;

@@ -29,6 +29,7 @@ public class HaulState extends State {
     private Vector2 haulToPosition;
     private TileMap tileMap;
     private HaulStatus haulStatus = HaulStatus.NONE;
+    final private int pickupRadius = 15;
     PathComponent pathComponent;
 
     ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
@@ -104,7 +105,7 @@ public class HaulState extends State {
         PositionComponent haulPosComponent = posComponents.get(haulEntity);
         //Gdx.app.log("s", String.valueOf(Pathfinding.chebyshevDistance(posComponent.pos, haulPosComponent.pos)));
         if (!pathComponents.has(entity) && haulStatus == HaulStatus.TRAVELLING_TO_OBJECT
-                && Pathfinding.chebyshevDistance(posComponent.pos, haulPosComponent.pos) <= 15) {
+                && Pathfinding.chebyshevDistance(posComponent.pos, haulPosComponent.pos) <= pickupRadius) {
 
             Gdx.app.log("Game", "Arrived at haul destination");
             Path<Vertex> pathToDestination = Pathfinding.getPath(posComponent.pos, haulToPosition, tileMap);
