@@ -10,6 +10,7 @@ import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.utilities.grid.Pathfinding;
 import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.engine.utilities.grid.Vertex;
+import space.earlygrey.simplegraphs.Path;
 
 public class PathFollowingSystem extends IntervalIteratingSystem {
 
@@ -33,7 +34,7 @@ public class PathFollowingSystem extends IntervalIteratingSystem {
         }
 
         //If just a path was added, grab last point for destination
-        if (path.getDestination() == null) {
+        if (path.getDestination() == null && !path.getPath().isEmpty()) {
             path.setDestination(tileMap.cellIndexToWorld(path.getPath().getLast()));
         }
 
@@ -45,10 +46,14 @@ public class PathFollowingSystem extends IntervalIteratingSystem {
         Vertex nextPos = path.getPath().remove(0);
         Vector2 v2pos = tileMap.cellIndexToWorld(nextPos);
 
-        //Check if there wasn't an update to this edge since path creation
-        if (!path.getPath().isEmpty() && !tileMap.graph.getGraph().edgeExists(nextPos, path.getPath().getFirst())) {
-            //If we set the path to null, the path will be re-calculated and a new path will be found
-            path.setPath(null);
+        for (int i = 0; i < path.getPath().getLength()-1; i++) {
+            if (i > 5) { break; }
+            Path<Vertex> vertexPath = path.getPath();
+            if (!tileMap.graph.getGraph().edgeExists(vertexPath.get(i), vertexPath.get(i+1))) {
+                path.setPath(null);
+                break;
+            }
+
         }
 
         pos.pos = v2pos;

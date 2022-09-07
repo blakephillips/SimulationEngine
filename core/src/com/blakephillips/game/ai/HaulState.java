@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.blakephillips.engine.ai.State;
 import com.blakephillips.engine.ecs.components.PathComponent;
+import com.blakephillips.engine.ecs.components.ai.ReservedComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.components.position.SnapToPositionComponent;
 import com.blakephillips.engine.ecs.systems.PathFollowingSystem;
@@ -32,7 +33,7 @@ public class HaulState extends State {
 
     ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
     ComponentMapper<PathComponent> pathComponents = ComponentMapper.getFor(PathComponent.class);
-
+    ComponentMapper<ReservedComponent> reservedComponents = ComponentMapper.getFor(ReservedComponent.class);
     @Override
     public void enter() {
         Gdx.app.log("Game", "Haul state entered");
@@ -51,6 +52,12 @@ public class HaulState extends State {
 
         if (posComponents.has(haulEntity) == false) {
             Gdx.app.error("Game", "HaulObject has no position component");
+            this.exit();
+            return;
+        }
+
+        if (isAlreadyReserved(haulEntity)) {
+            Gdx.app.error("Game", "HaulObject is already reserved by another actor");
             this.exit();
             return;
         }
@@ -77,6 +84,7 @@ public class HaulState extends State {
 
         this.pathComponent = new PathComponent(pathToHaulObject);
         entity.add(pathComponent);
+        entity.add(new ReservedComponent(entity));
         haulStatus = HaulStatus.TRAVELLING_TO_OBJECT;
         stateStatus = StateStatus.RUNNING;
     }
@@ -116,11 +124,13 @@ public class HaulState extends State {
         if (!pathComponents.has(entity) &&
                 haulStatus == HaulStatus.HAULING_TO_DESTINATION) {
 
-            //stop being bound to player
+            //stop being bound to actor
             haulEntity.remove(SnapToPositionComponent.class);
+            haulEntity.remove(ReservedComponent.class);
 
             //temp
             entity.add(new PathComponent(new Vector2(200, 200)));
+            //
 
             exit();
         }
