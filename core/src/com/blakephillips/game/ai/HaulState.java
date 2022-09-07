@@ -85,6 +85,7 @@ public class HaulState extends State {
     public void exit() {
         Gdx.app.log("Game", "Haul state exited");
         stateStatus = StateStatus.EXITED;
+        haulStatus = HaulStatus.DONE;
     }
 
     //State status must be RUNNING for update() to be called

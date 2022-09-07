@@ -28,18 +28,28 @@ public class PathFollowingSystem extends IntervalIteratingSystem {
         PathComponent path = pathComponents.get(entity);
 
         //If a path was added with just a destination but no path (wooo convenience)
-        if (path.path == null) {
-            path.path = Pathfinding.getPath(pos.pos, path.destination, tileMap);
+        if (path.getPath() == null) {
+            path.setPath(Pathfinding.getPath(pos.pos, path.getDestination(), tileMap));
         }
 
-        if (path.path.isEmpty()) {
+        //If just a path was added, grab last point for destination
+        if (path.getDestination() == null) {
+            path.setDestination(tileMap.cellIndexToWorld(path.getPath().getLast()));
+        }
+
+        if (path.getPath().isEmpty()) {
             entity.remove(PathComponent.class);
             return;
         }
-
         //for now tile by tile movement, can do this with velocity and not do a intervalSystem
-        Vertex nextPos = path.path.remove(0);
+        Vertex nextPos = path.getPath().remove(0);
         Vector2 v2pos = tileMap.cellIndexToWorld(nextPos);
+
+        //Check if there wasn't an update to this edge since path creation
+        if (!path.getPath().isEmpty() && !tileMap.graph.getGraph().edgeExists(nextPos, path.getPath().getFirst())) {
+            //If we set the path to null, the path will be re-calculated and a new path will be found
+            path.setPath(null);
+        }
 
         pos.pos = v2pos;
     }
