@@ -12,10 +12,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.blakephillips.engine.ecs.components.ai.StateComponent;
 import com.blakephillips.engine.ecs.components.gfx.DisplayFpsComponent;
 import com.blakephillips.engine.ecs.components.gfx.TextComponent;
 import com.blakephillips.engine.ecs.components.gfx.TextureComponent;
+import com.blakephillips.engine.ecs.components.ai.StateComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.systems.PathFollowingSystem;
 import com.blakephillips.engine.ecs.systems.ai.StateSystem;
@@ -64,7 +64,6 @@ public class Game extends ApplicationAdapter {
 		engine.addSystem(new SnapPositionSystem());
 		engine.addSystem(new OffsetPositionSystem());
 		engine.addSystem(new MovementSystem());
-		engine.addSystem(new DebugSystem(tilemap, character.entity));
 		engine.addSystem(new PathFollowingSystem(tilemap));
 		engine.addSystem(new StateSystem());
 		engine.addSystem(new TextureDirectionSystem());
@@ -90,6 +89,7 @@ public class Game extends ApplicationAdapter {
 
 		HaulState haulState = new HaulState(c, haulObject, new Vector2(50, 50));
 		c.add(new StateComponent(haulState));
+		engine.addSystem(new DebugSystem(tilemap, character.entity, haulObject));
 
 	}
 

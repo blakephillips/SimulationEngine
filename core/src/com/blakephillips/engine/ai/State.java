@@ -22,7 +22,7 @@ public abstract class State {
     public boolean isAlreadyReserved(Entity entityToCheck) {
         ComponentMapper<ReservedComponent> reservedComponents = ComponentMapper.getFor(ReservedComponent.class);
         if (reservedComponents.has(entityToCheck)) {
-            if (reservedComponents.get(entityToCheck).getReservedBy() != entity) {
+            if (!reservedComponents.get(entityToCheck).getReservedBy().equals(entity)) {
                 return true;
             }
         }

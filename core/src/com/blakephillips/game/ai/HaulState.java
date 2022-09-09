@@ -85,7 +85,7 @@ public class HaulState extends State {
 
         this.pathComponent = new PathComponent(pathToHaulObject);
         entity.add(pathComponent);
-        entity.add(new ReservedComponent(entity));
+        haulEntity.add(new ReservedComponent(entity));
         haulStatus = HaulStatus.TRAVELLING_TO_OBJECT;
         stateStatus = StateStatus.RUNNING;
     }
@@ -93,6 +93,7 @@ public class HaulState extends State {
     @Override
     public void exit() {
         Gdx.app.log("Game", "Haul state exited");
+        haulEntity.remove(ReservedComponent.class);
         stateStatus = StateStatus.EXITED;
         haulStatus = HaulStatus.DONE;
     }
@@ -121,7 +122,13 @@ public class HaulState extends State {
             entity.add(new PathComponent(pathToDestination));
             haulStatus = HaulStatus.HAULING_TO_DESTINATION;
         }
-
+        //Validate we can reach the haul object
+        else if (!pathComponents.has(entity) && haulStatus == HaulStatus.TRAVELLING_TO_OBJECT) {
+            Gdx.app.debug("Game", "HaulTo destination cannot be reached");
+            this.exit();
+            return;
+        }
+        //Handle cannot reach destination or reached destination
         if (!pathComponents.has(entity) &&
                 haulStatus == HaulStatus.HAULING_TO_DESTINATION) {
 
@@ -130,7 +137,7 @@ public class HaulState extends State {
             haulEntity.remove(ReservedComponent.class);
 
             //temp
-            entity.add(new PathComponent(new Vector2(200, 200)));
+            //entity.add(new PathComponent(new Vector2(200, 200)));
             //
 
             exit();
