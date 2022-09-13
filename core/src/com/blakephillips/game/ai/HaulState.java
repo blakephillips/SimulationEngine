@@ -136,12 +136,6 @@ public class HaulState extends State {
             haulEntity.remove(SnapToPositionComponent.class);
             haulEntity.remove(ReservedComponent.class);
 
-            //temp
-            //entity.add(new PathComponent(new Vector2(200, 200)));
-            //
-
-
-
             if (Pathfinding.chebyshevDistance(posComponent.pos, haulToPosition) > pickupRadius) {
                 exit(true);
                 return;

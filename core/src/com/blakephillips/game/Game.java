@@ -16,7 +16,6 @@ import com.blakephillips.engine.ecs.components.ai.JobComponent;
 import com.blakephillips.engine.ecs.components.gfx.DisplayFpsComponent;
 import com.blakephillips.engine.ecs.components.gfx.TextComponent;
 import com.blakephillips.engine.ecs.components.gfx.TextureComponent;
-import com.blakephillips.engine.ecs.components.ai.StateComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.systems.PathFollowingSystem;
 import com.blakephillips.engine.ecs.systems.ai.JobSystem;
@@ -97,7 +96,6 @@ public class Game extends ApplicationAdapter {
 		haulState.setNextState(pathState);
 		pathState.setNextState(pathState2);
 		pathState2.setNextState(haulState2);
-		//c.add(new StateComponent(haulState));
 
 		JobComponent jobComponent = new JobComponent("Haul to place", JobComponent.JobStatus.START_PENDING, haulState);
 		Entity jobEntity = new Entity();

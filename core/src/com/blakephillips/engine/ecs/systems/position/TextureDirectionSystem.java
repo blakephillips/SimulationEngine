@@ -7,7 +7,6 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.blakephillips.engine.ecs.components.gfx.DirectionalTextureComponent;
 import com.blakephillips.engine.ecs.components.gfx.TextureComponent;
 import com.blakephillips.engine.ecs.components.position.DirectionComponent;
-import com.blakephillips.engine.ecs.systems.gfx.TextRenderSystem;
 
 public class TextureDirectionSystem extends IteratingSystem {
 
