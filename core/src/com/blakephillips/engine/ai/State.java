@@ -7,6 +7,8 @@ import com.blakephillips.engine.ecs.components.ai.ReservedComponent;
 public abstract class State {
     public Entity entity;
     public StateStatus stateStatus = StateStatus.IDLE;
+    private State previousState = null;
+    private State nextState = null;
     public State(Entity entity) {
         this.entity = entity;
     }
@@ -29,9 +31,35 @@ public abstract class State {
         return false;
     }
 
+    public void exit(boolean failed) {
+        exit();
+        if (failed) {
+            stateStatus = StateStatus.FAILED;
+        }
+    }
+
+    public void setPreviousState(State state) {
+        previousState = state;
+        state.nextState = this;
+    }
+
+    public State getPreviousState() {
+        return previousState;
+    }
+
+    public void setNextState(State state) {
+        nextState = state;
+        state.previousState = this;
+    }
+
+    public State getNextState() {
+        return nextState;
+    }
+
     public enum StateStatus {
         IDLE,
         RUNNING,
-        EXITED
+        COMPLETE,
+        FAILED
     }
 }

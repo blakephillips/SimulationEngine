@@ -60,6 +60,9 @@ public class PathFollowingSystem extends IntervalIteratingSystem {
             if (i > 5) { break; }
             Path<Vertex> vertexPath = path.getPath();
             if (!tileMap.graph.getGraph().edgeExists(vertexPath.get(i), vertexPath.get(i+1))) {
+
+                //when a path is null, but there is a destination,
+                //will attempt to re-path to the destination
                 path.setPath(null);
                 break;
             }

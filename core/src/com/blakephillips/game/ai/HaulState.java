@@ -41,25 +41,25 @@ public class HaulState extends State {
 
         if (haulEntity == null) {
             Gdx.app.error("Game", "HaulObject is null");
-            this.exit();
+            this.exit(true);
             return;
         }
 
         if (posComponents.has(entity) == false) {
             Gdx.app.error("Game", "Haul actor has no position component");
-            this.exit();
+            this.exit(true);
             return;
         }
 
         if (posComponents.has(haulEntity) == false) {
             Gdx.app.error("Game", "HaulObject has no position component");
-            this.exit();
+            this.exit(true);
             return;
         }
 
         if (isAlreadyReserved(haulEntity)) {
             Gdx.app.error("Game", "HaulObject is already reserved by another actor");
-            this.exit();
+            this.exit(true);
             return;
         }
 
@@ -73,13 +73,13 @@ public class HaulState extends State {
         Path<Vertex> pathToHaulObject = Pathfinding.getPath(posComponent.pos, haulPosComponent.pos, tileMap);
         if (pathToHaulObject.isEmpty()) {
             Gdx.app.debug("Game", "HaulObject cannot be reached by actor");
-            this.exit();
+            this.exit(true);
             return;
         }
 
         if (!Pathfinding.isReachable(haulPosComponent.pos, haulToPosition, tileMap)) {
             Gdx.app.debug("Game", "HaulTo destination cannot be reached");
-            this.exit();
+            this.exit(true);
             return;
         }
 
@@ -94,7 +94,7 @@ public class HaulState extends State {
     public void exit() {
         Gdx.app.log("Game", "Haul state exited");
         haulEntity.remove(ReservedComponent.class);
-        stateStatus = StateStatus.EXITED;
+        stateStatus = StateStatus.COMPLETE;
         haulStatus = HaulStatus.DONE;
     }
 
@@ -114,7 +114,7 @@ public class HaulState extends State {
             //Validate we can reach the destination
             if (pathToDestination.isEmpty()) {
                 Gdx.app.debug("Game", "HaulTo destination cannot be reached");
-                this.exit();
+                this.exit(true);
                 return;
             }
 
@@ -125,7 +125,7 @@ public class HaulState extends State {
         //Validate we can reach the haul object
         else if (!pathComponents.has(entity) && haulStatus == HaulStatus.TRAVELLING_TO_OBJECT) {
             Gdx.app.debug("Game", "HaulTo destination cannot be reached");
-            this.exit();
+            this.exit(true);
             return;
         }
         //Handle cannot reach destination or reached destination
@@ -139,6 +139,13 @@ public class HaulState extends State {
             //temp
             //entity.add(new PathComponent(new Vector2(200, 200)));
             //
+
+
+
+            if (Pathfinding.chebyshevDistance(posComponent.pos, haulToPosition) > pickupRadius) {
+                exit(true);
+                return;
+            }
 
             exit();
         }

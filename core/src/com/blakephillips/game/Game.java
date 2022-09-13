@@ -12,12 +12,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.blakephillips.engine.ecs.components.ai.JobComponent;
 import com.blakephillips.engine.ecs.components.gfx.DisplayFpsComponent;
 import com.blakephillips.engine.ecs.components.gfx.TextComponent;
 import com.blakephillips.engine.ecs.components.gfx.TextureComponent;
 import com.blakephillips.engine.ecs.components.ai.StateComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.systems.PathFollowingSystem;
+import com.blakephillips.engine.ecs.systems.ai.JobSystem;
 import com.blakephillips.engine.ecs.systems.ai.StateSystem;
 import com.blakephillips.engine.ecs.systems.gfx.RenderSystem;
 import com.blakephillips.engine.ecs.systems.gfx.TextRenderSystem;
@@ -28,6 +30,7 @@ import com.blakephillips.engine.ecs.systems.position.*;
 import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.engine.utilities.sprite.SpriteSheet;
 import com.blakephillips.game.ai.HaulState;
+import com.blakephillips.game.ai.PathFindingState;
 import com.blakephillips.game.ui.TileSelector;
 
 public class Game extends ApplicationAdapter {
@@ -86,9 +89,22 @@ public class Game extends ApplicationAdapter {
 		haulObject.add(new PositionComponent(new Vector2(250, 250)));
 
 		engine.addEntity(haulObject);
-
+		//job system testing
 		HaulState haulState = new HaulState(c, haulObject, new Vector2(50, 50));
-		c.add(new StateComponent(haulState));
+		PathFindingState pathState = new PathFindingState(c, new Vector2(450, 450));
+		PathFindingState pathState2 = new PathFindingState(c, new Vector2(300, 300));
+		HaulState haulState2 = new HaulState(c, haulObject, new Vector2(450, 450));
+		haulState.setNextState(pathState);
+		pathState.setNextState(pathState2);
+		pathState2.setNextState(haulState2);
+		//c.add(new StateComponent(haulState));
+
+		JobComponent jobComponent = new JobComponent("Haul to place", JobComponent.JobStatus.START_PENDING, haulState);
+		Entity jobEntity = new Entity();
+		jobEntity.add(jobComponent);
+		engine.addEntity(jobEntity);
+
+		engine.addSystem(new JobSystem());
 		engine.addSystem(new DebugSystem(tilemap, character.entity, haulObject));
 
 	}

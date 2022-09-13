@@ -2,7 +2,6 @@ package com.blakephillips.engine.ecs.systems.ai;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.blakephillips.engine.ai.State;
 import com.blakephillips.engine.ecs.components.ai.StateComponent;
 
@@ -25,7 +24,7 @@ public class StateSystem extends IteratingSystem {
             stateComponent.state.update(deltaTime);
         }
         // for now, just remove the state completely when exited.
-        else if (stateComponent.state.stateStatus == State.StateStatus.EXITED) {
+        else if (stateComponent.state.stateStatus == State.StateStatus.COMPLETE) {
             entity.remove(StateComponent.class);
         }
     }
