@@ -30,6 +30,9 @@ import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.engine.utilities.sprite.SpriteSheet;
 import com.blakephillips.game.ai.HaulState;
 import com.blakephillips.game.ai.PathFindingState;
+import com.blakephillips.game.data.ResourceType;
+import com.blakephillips.game.ecs.components.ResourceComponent;
+import com.blakephillips.game.ecs.systems.ResourceSystem;
 import com.blakephillips.game.ui.TileSelector;
 
 public class Game extends ApplicationAdapter {
@@ -69,7 +72,7 @@ public class Game extends ApplicationAdapter {
 		engine.addSystem(new PathFollowingSystem(tilemap));
 		engine.addSystem(new StateSystem());
 		engine.addSystem(new TextureDirectionSystem());
-		new TileSelector(engine);
+		new TileSelector();
 
 		//display fps
 		Entity fps = new Entity();
@@ -102,6 +105,16 @@ public class Game extends ApplicationAdapter {
 		jobEntity.add(jobComponent);
 		engine.addEntity(jobEntity);
 
+		//item testing
+		SpriteSheet sprites = new SpriteSheet("sprites.png", 16, 16);
+		TextureRegion logTex = sprites.getTextureFromTileMap(0,0);
+		Entity log = new Entity();
+		log.add(new TextureComponent(logTex, -1));
+		log.add(new PositionComponent(new Vector2(16*15, 16*15)));
+		log.add(new ResourceComponent(ResourceType.WOOD));
+		engine.addEntity(log);
+
+		engine.addSystem(new ResourceSystem());
 		engine.addSystem(new JobSystem());
 		engine.addSystem(new DebugSystem(tilemap, character.entity, haulObject));
 

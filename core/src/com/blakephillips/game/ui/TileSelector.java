@@ -14,11 +14,12 @@ import com.blakephillips.engine.ecs.components.position.CenterPositionComponent;
 import com.blakephillips.engine.ecs.components.position.DisplayPositionComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.components.position.SnapPositionComponent;
+import com.blakephillips.game.Orchestrator;
 
 public class TileSelector {
     private Entity entity;
 
-    public TileSelector(Engine engine) {
+    public TileSelector() {
         TextureRegion mouseRegion = new TextureRegion(new Texture(Gdx.files.internal("tile_selector.png")));
 
         entity = new Entity();
@@ -31,7 +32,7 @@ public class TileSelector {
         entity.add(new TextComponent(""));
         entity.add(new DisplayPositionComponent());
 
-        engine.addEntity(entity);
+        Orchestrator.getEngine().addEntity(entity);
     }
 
 }
