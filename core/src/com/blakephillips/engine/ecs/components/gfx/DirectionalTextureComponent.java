@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DirectionalTextureComponent implements Component {
-    private Map<Direction, TextureRegion> textureMap;
+    private final Map<Direction, TextureRegion> textureMap;
 
     public DirectionalTextureComponent(TextureRegion north, TextureRegion east,
                                        TextureRegion south, TextureRegion west) {

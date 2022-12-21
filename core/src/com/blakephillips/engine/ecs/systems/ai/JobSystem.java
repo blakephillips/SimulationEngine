@@ -1,6 +1,7 @@
 package com.blakephillips.engine.ecs.systems.ai;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.blakephillips.engine.ai.State;
 import com.blakephillips.engine.ecs.components.ai.JobComponent;
 import com.blakephillips.engine.ecs.components.ai.StateComponent;
+import com.blakephillips.game.Orchestrator;
 
 public class JobSystem extends IteratingSystem {
 
@@ -15,11 +17,9 @@ public class JobSystem extends IteratingSystem {
     public JobSystem() {
         super(Family.all(JobComponent.class).get());
     }
-
     @Override
     protected void processEntity(Entity entity, float v) {
         JobComponent job = jobComponents.get(entity);
-
         if (job.status == JobComponent.JobStatus.START_PENDING) {
             job.getStateEntity().add(new StateComponent(job.getCurrentState()));
             getEngine().addEntity(job.getStateEntity());

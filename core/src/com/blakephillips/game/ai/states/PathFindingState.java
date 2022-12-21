@@ -1,4 +1,4 @@
-package com.blakephillips.game.ai;
+package com.blakephillips.game.ai.states;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -18,12 +18,12 @@ import space.earlygrey.simplegraphs.Path;
 
 public class PathFindingState extends State {
 
-    private Vector2 destination;
+    private final Vector2 destination;
     private PositionComponent positionComponent;
     private PathComponent pathComponent;
     private final int proximity = 15;
-    private ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<PathComponent> pathComponents = ComponentMapper.getFor(PathComponent.class);
+    private final ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
+    private final ComponentMapper<PathComponent> pathComponents = ComponentMapper.getFor(PathComponent.class);
 
     public PathFindingState(Entity actor, Vector2 destination) {
         super(actor);
@@ -34,7 +34,7 @@ public class PathFindingState extends State {
     public void enter() {
         Gdx.app.log("Game", "Path finding state entered");
 
-        if (posComponents.has(entity) == false) {
+        if (!posComponents.has(entity)) {
             Gdx.app.error("Game", "Attempted pathing entity has no position component.");
             exit(true);
             return;

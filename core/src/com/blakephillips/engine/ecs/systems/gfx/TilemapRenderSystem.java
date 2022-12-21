@@ -11,8 +11,8 @@ public class TilemapRenderSystem extends EntitySystem {
 
     public TileMap tilemap;
     private float unitScale;
-    private OrthographicCamera camera;
-    private OrthogonalTiledMapRenderer renderer;
+    private final OrthographicCamera camera;
+    private final OrthogonalTiledMapRenderer renderer;
 
     public TilemapRenderSystem(OrthographicCamera camera, OrthogonalTiledMapRenderer renderer) {
         this.camera = camera;

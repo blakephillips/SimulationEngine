@@ -1,4 +1,4 @@
-package com.blakephillips.game.ai;
+package com.blakephillips.game.ai.states;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -45,13 +45,13 @@ public class HaulState extends State {
             return;
         }
 
-        if (posComponents.has(entity) == false) {
+        if (!posComponents.has(entity)) {
             Gdx.app.error("Game", "Haul actor has no position component");
             this.exit(true);
             return;
         }
 
-        if (posComponents.has(haulEntity) == false) {
+        if (!posComponents.has(haulEntity)) {
             Gdx.app.error("Game", "HaulObject has no position component");
             this.exit(true);
             return;

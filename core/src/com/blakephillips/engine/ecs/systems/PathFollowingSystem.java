@@ -16,10 +16,10 @@ import space.earlygrey.simplegraphs.Path;
 
 public class PathFollowingSystem extends IntervalIteratingSystem {
 
-    private ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<PathComponent> pathComponents = ComponentMapper.getFor(PathComponent.class);
-    private ComponentMapper<DirectionComponent> directionComponents = ComponentMapper.getFor(DirectionComponent.class);
-    private TileMap tileMap;
+    private final ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
+    private final ComponentMapper<PathComponent> pathComponents = ComponentMapper.getFor(PathComponent.class);
+    private final ComponentMapper<DirectionComponent> directionComponents = ComponentMapper.getFor(DirectionComponent.class);
+    private final TileMap tileMap;
 
     public PathFollowingSystem(TileMap tileMap) {
         super(Family.all(PositionComponent.class, PathComponent.class).get(), 0.1f);

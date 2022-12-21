@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.HashMap;
 
 public class SpriteSheet {
-    private TextureRegion spriteSheet;
-    private TextureRegion[][] splitSpriteSheet;
-    private HashMap<String, TextureRegion> flippedSprites;
+    private final TextureRegion spriteSheet;
+    private final TextureRegion[][] splitSpriteSheet;
+    private final HashMap<String, TextureRegion> flippedSprites;
 
-    private int spriteWidth;
-    private int spriteHeight;
+    private final int spriteWidth;
+    private final int spriteHeight;
 
     public SpriteSheet(String assetPath, int spriteWidth, int spriteHeight) {
         spriteSheet = new TextureRegion(

@@ -14,13 +14,13 @@ import com.blakephillips.engine.ecs.components.position.PositionComponent;
 
 public class TextRenderSystem extends IteratingSystem {
 
-    private BitmapFont font = new BitmapFont();
-    private SpriteBatch batch;
+    private final BitmapFont font = new BitmapFont();
+    private final SpriteBatch batch;
 
-    private ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<TextComponent> textComponents = ComponentMapper.getFor(TextComponent.class);
-    private ComponentMapper<DisplayPositionComponent> displayPosComponents = ComponentMapper.getFor(DisplayPositionComponent.class);
-    private ComponentMapper<DisplayFpsComponent> displayFpsComponents = ComponentMapper.getFor(DisplayFpsComponent.class);
+    private final ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
+    private final ComponentMapper<TextComponent> textComponents = ComponentMapper.getFor(TextComponent.class);
+    private final ComponentMapper<DisplayPositionComponent> displayPosComponents = ComponentMapper.getFor(DisplayPositionComponent.class);
+    private final ComponentMapper<DisplayFpsComponent> displayFpsComponents = ComponentMapper.getFor(DisplayFpsComponent.class);
 
     public TextRenderSystem(SpriteBatch batch) {
         super(Family.all(TextComponent.class, PositionComponent.class).get());

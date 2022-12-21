@@ -14,7 +14,10 @@ public abstract class State {
     }
 
     public abstract void enter();
-    public abstract void exit();
+    public void exit() {
+        stateStatus = StateStatus.COMPLETE;
+    }
+
     public abstract void update(float deltaTime);
     public void reserveEntity(Entity entityToReserve) {
         entityToReserve.add(new ReservedComponent(entity));
@@ -24,9 +27,7 @@ public abstract class State {
     public boolean isAlreadyReserved(Entity entityToCheck) {
         ComponentMapper<ReservedComponent> reservedComponents = ComponentMapper.getFor(ReservedComponent.class);
         if (reservedComponents.has(entityToCheck)) {
-            if (!reservedComponents.get(entityToCheck).getReservedBy().equals(entity)) {
-                return true;
-            }
+            return !reservedComponents.get(entityToCheck).getReservedBy().equals(entity);
         }
         return false;
     }
@@ -58,6 +59,7 @@ public abstract class State {
 
     public enum StateStatus {
         IDLE,
+        PAUSED,
         RUNNING,
         COMPLETE,
         FAILED

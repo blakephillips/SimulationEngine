@@ -8,8 +8,8 @@ import com.blakephillips.engine.ecs.components.position.OffsetPositionComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 
 public class OffsetPositionSystem extends IteratingSystem {
-    private ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<OffsetPositionComponent> offsetComponents = ComponentMapper.getFor(OffsetPositionComponent.class);
+    private final ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
+    private final ComponentMapper<OffsetPositionComponent> offsetComponents = ComponentMapper.getFor(OffsetPositionComponent.class);
 
     public OffsetPositionSystem() {
         super(Family.all(PositionComponent.class, OffsetPositionComponent.class).get());

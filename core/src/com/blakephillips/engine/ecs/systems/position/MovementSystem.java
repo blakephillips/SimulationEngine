@@ -8,8 +8,8 @@ import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.components.position.VelocityComponent;
 
 public class MovementSystem extends IteratingSystem {
-    private ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<VelocityComponent> velComponents = ComponentMapper.getFor(VelocityComponent.class);
+    private final ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
+    private final ComponentMapper<VelocityComponent> velComponents = ComponentMapper.getFor(VelocityComponent.class);
 
     public MovementSystem() {
         super(Family.all(PositionComponent.class, VelocityComponent.class).get());

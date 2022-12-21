@@ -16,12 +16,12 @@ public class TileMap {
     public OrthogonalTiledMapRenderer tileMapRenderer;
     public Graph graph;
 
-    private int width;
-    private int height;
-    private float cellSize;
+    private final int width;
+    private final int height;
+    private final float cellSize;
 
-    private OrthographicCamera camera;
-    private TiledMapTileLayer collisionLayer;
+    private final OrthographicCamera camera;
+    private final TiledMapTileLayer collisionLayer;
 
     public TileMap(int height, int width, int cellSize, float unitScale, OrthographicCamera camera) {
         this.height = height;

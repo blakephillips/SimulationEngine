@@ -7,9 +7,9 @@ import space.earlygrey.simplegraphs.UndirectedGraph;
 public class Graph {
 
     public UndirectedGraph<Vertex> graph;
-    private int graphHeight;
-    private int graphWidth;
-    private TileMap tilemap;
+    private final int graphHeight;
+    private final int graphWidth;
+    private final TileMap tilemap;
 
     public Graph(TileMap tilemap, int graphWidth, int graphHeight) {
 

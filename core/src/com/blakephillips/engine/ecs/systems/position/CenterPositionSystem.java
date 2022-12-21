@@ -9,8 +9,8 @@ import com.blakephillips.engine.ecs.components.position.PositionComponent;
 
 public class CenterPositionSystem extends IteratingSystem {
 
-    private ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<CenterPositionComponent> centerPosComponents = ComponentMapper.getFor(CenterPositionComponent.class);
+    private final ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
+    private final ComponentMapper<CenterPositionComponent> centerPosComponents = ComponentMapper.getFor(CenterPositionComponent.class);
 
     public CenterPositionSystem() {
         super(Family.all(CenterPositionComponent.class, PositionComponent.class).get());

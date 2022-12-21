@@ -12,8 +12,8 @@ import com.blakephillips.engine.ecs.components.mouse.MousePositionComponent;
 
 public class MousePositionSystem extends IteratingSystem {
 
-    private ComponentMapper<MousePositionComponent> mouseComponents = ComponentMapper.getFor(MousePositionComponent.class);
-    private Viewport viewport;
+    private final ComponentMapper<MousePositionComponent> mouseComponents = ComponentMapper.getFor(MousePositionComponent.class);
+    private final Viewport viewport;
     private Vector3 v3pos;
     private Vector2 v2pos;
     public MousePositionSystem(Viewport viewport) {

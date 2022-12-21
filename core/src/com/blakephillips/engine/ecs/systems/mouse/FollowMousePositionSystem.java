@@ -10,8 +10,8 @@ import com.blakephillips.engine.ecs.components.position.PositionComponent;
 
 public class FollowMousePositionSystem extends IteratingSystem {
 
-    private ComponentMapper<MousePositionComponent> mouseComponents = ComponentMapper.getFor(MousePositionComponent.class);
-    private ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
+    private final ComponentMapper<MousePositionComponent> mouseComponents = ComponentMapper.getFor(MousePositionComponent.class);
+    private final ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
 
     public FollowMousePositionSystem() {
         super(Family.all(MousePositionComponent.class, FollowMouseComponent.class, PositionComponent.class).get());

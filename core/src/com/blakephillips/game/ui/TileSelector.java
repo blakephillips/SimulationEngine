@@ -1,6 +1,5 @@
 package com.blakephillips.game.ui;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,7 +16,7 @@ import com.blakephillips.engine.ecs.components.position.SnapPositionComponent;
 import com.blakephillips.game.Orchestrator;
 
 public class TileSelector {
-    private Entity entity;
+    private final Entity entity;
 
     public TileSelector() {
         TextureRegion mouseRegion = new TextureRegion(new Texture(Gdx.files.internal("tile_selector.png")));

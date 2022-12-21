@@ -11,9 +11,9 @@ import com.blakephillips.engine.ecs.components.position.SnapToPositionComponent;
 
 public class SnapPositionSystem extends IteratingSystem {
 
-    private ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<SnapPositionComponent> snapComponents = ComponentMapper.getFor(SnapPositionComponent.class);
-    private ComponentMapper<SnapToPositionComponent> snapToComponents = ComponentMapper.getFor(SnapToPositionComponent.class);
+    private final ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
+    private final ComponentMapper<SnapPositionComponent> snapComponents = ComponentMapper.getFor(SnapPositionComponent.class);
+    private final ComponentMapper<SnapToPositionComponent> snapToComponents = ComponentMapper.getFor(SnapToPositionComponent.class);
 
     public SnapPositionSystem() {
         super(Family.all(PositionComponent.class).one(SnapPositionComponent.class, SnapToPositionComponent.class).get());

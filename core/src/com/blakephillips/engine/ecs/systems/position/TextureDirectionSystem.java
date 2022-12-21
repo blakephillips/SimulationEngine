@@ -10,9 +10,9 @@ import com.blakephillips.engine.ecs.components.position.DirectionComponent;
 
 public class TextureDirectionSystem extends IteratingSystem {
 
-    private ComponentMapper<TextureComponent> textureComponents = ComponentMapper.getFor(TextureComponent.class);
-    private ComponentMapper<DirectionComponent> directionComponents = ComponentMapper.getFor(DirectionComponent.class);
-    private ComponentMapper<DirectionalTextureComponent> directionalTexComponents = ComponentMapper.getFor(DirectionalTextureComponent.class);
+    private final ComponentMapper<TextureComponent> textureComponents = ComponentMapper.getFor(TextureComponent.class);
+    private final ComponentMapper<DirectionComponent> directionComponents = ComponentMapper.getFor(DirectionComponent.class);
+    private final ComponentMapper<DirectionalTextureComponent> directionalTexComponents = ComponentMapper.getFor(DirectionalTextureComponent.class);
 
     public TextureDirectionSystem() {
         super(Family.all(TextureComponent.class, DirectionComponent.class, DirectionalTextureComponent.class).get());

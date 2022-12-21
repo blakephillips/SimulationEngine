@@ -6,9 +6,9 @@ import com.blakephillips.engine.ai.State;
 
 public class JobComponent implements Component {
     private String name;
-    private State rootState;
+    private final State rootState;
     private State currentState;
-    private Entity stateEntity;
+    private final Entity stateEntity;
     public JobStatus status;
 
     public JobComponent(String jobName, JobStatus jobStatus, State rootState) {

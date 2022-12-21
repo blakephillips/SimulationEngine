@@ -11,9 +11,9 @@ import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import java.util.Comparator;
 
 public class RenderSystem extends SortedIteratingSystem {
-    private SpriteBatch batch;
-    private ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<TextureComponent> texComponents = ComponentMapper.getFor(TextureComponent.class);
+    private final SpriteBatch batch;
+    private final ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
+    private final ComponentMapper<TextureComponent> texComponents = ComponentMapper.getFor(TextureComponent.class);
 
     public RenderSystem(SpriteBatch batch) {
         super(Family.all(PositionComponent.class, TextureComponent.class).get(), new ZComparator());

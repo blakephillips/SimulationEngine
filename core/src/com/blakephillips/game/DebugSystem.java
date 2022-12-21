@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 import com.blakephillips.engine.ecs.components.PathComponent;
+import com.blakephillips.engine.ecs.components.ai.JobComponent;
 import com.blakephillips.engine.ecs.components.ai.StateComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.systems.mouse.MousePositionSystem;
@@ -17,7 +18,10 @@ import com.blakephillips.engine.utilities.grid.Pathfinding;
 import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.engine.utilities.grid.Vertex;
 import com.blakephillips.engine.utilities.sprite.SpriteSheet;
-import com.blakephillips.game.ai.HaulState;
+import com.blakephillips.game.ai.states.HaulState;
+import com.blakephillips.game.ai.jobs.GetResourceTypeToDestination;
+import com.blakephillips.game.ai.states.PathFindingState;
+import com.blakephillips.game.data.ResourceType;
 
 public class DebugSystem extends EntitySystem {
     //temp
@@ -26,7 +30,7 @@ public class DebugSystem extends EntitySystem {
     Entity testHaulEntity;
 
     TileMap tileMap;
-    public DebugSystem(TileMap tileMap, Entity testEntity, Entity testHaulEntity) {
+    public DebugSystem(TileMap tileMap, Entity testEntity, Entity testHaulEntity, Entity testOtherEntity) {
         this.tileMap = tileMap;
         //temporary
         this.testEntity = testEntity;
@@ -68,6 +72,18 @@ public class DebugSystem extends EntitySystem {
         //temporary hauling test
         if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
             testEntity.add(new StateComponent(new HaulState(testEntity, testHaulEntity, v2pos)));
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+            new GetResourceTypeToDestination(testEntity, v2pos, ResourceType.WOOD);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            PathFindingState walk = new PathFindingState(testEntity, v2pos);
+            JobComponent jobComponent = new JobComponent("Walk", JobComponent.JobStatus.START_PENDING, walk);
+            Entity entity = new Entity();
+            entity.add(jobComponent);
+            getEngine().addEntity(entity);
         }
 
     }

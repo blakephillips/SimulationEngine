@@ -28,8 +28,8 @@ import com.blakephillips.engine.ecs.systems.mouse.MousePositionSystem;
 import com.blakephillips.engine.ecs.systems.position.*;
 import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.engine.utilities.sprite.SpriteSheet;
-import com.blakephillips.game.ai.HaulState;
-import com.blakephillips.game.ai.PathFindingState;
+import com.blakephillips.game.ai.states.HaulState;
+import com.blakephillips.game.ai.states.PathFindingState;
 import com.blakephillips.game.data.ResourceType;
 import com.blakephillips.game.ecs.components.ResourceComponent;
 import com.blakephillips.game.ecs.systems.ResourceSystem;
@@ -72,6 +72,8 @@ public class Game extends ApplicationAdapter {
 		engine.addSystem(new PathFollowingSystem(tilemap));
 		engine.addSystem(new StateSystem());
 		engine.addSystem(new TextureDirectionSystem());
+		engine.addSystem(new ResourceSystem());
+		engine.addSystem(new JobSystem());
 		new TileSelector();
 
 		//display fps
@@ -114,9 +116,15 @@ public class Game extends ApplicationAdapter {
 		log.add(new ResourceComponent(ResourceType.WOOD));
 		engine.addEntity(log);
 
-		engine.addSystem(new ResourceSystem());
-		engine.addSystem(new JobSystem());
-		engine.addSystem(new DebugSystem(tilemap, character.entity, haulObject));
+		Entity log2 = new Entity();
+		log2.add(new TextureComponent(logTex, -1));
+		log2.add(new PositionComponent(new Vector2(16*10, 16*10)));
+		log2.add(new ResourceComponent(ResourceType.WOOD));
+		engine.addEntity(log2);
+
+
+		engine.addSystem(new DebugSystem(tilemap, character.entity, haulObject, c));
+
 
 	}
 
