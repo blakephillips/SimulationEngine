@@ -21,7 +21,9 @@ import com.blakephillips.engine.utilities.sprite.SpriteSheet;
 import com.blakephillips.game.ai.states.HaulState;
 import com.blakephillips.game.ai.jobs.GetResourceTypeToDestination;
 import com.blakephillips.game.ai.states.PathFindingState;
+import com.blakephillips.game.data.JobType;
 import com.blakephillips.game.data.ResourceType;
+import com.blakephillips.game.ecs.components.JobTypeComponent;
 
 public class DebugSystem extends EntitySystem {
     //temp
@@ -76,13 +78,16 @@ public class DebugSystem extends EntitySystem {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
             new GetResourceTypeToDestination(testEntity, v2pos, ResourceType.WOOD);
+
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            PathFindingState walk = new PathFindingState(testEntity, v2pos);
-            JobComponent jobComponent = new JobComponent("Walk", JobComponent.JobStatus.START_PENDING, walk);
+            PathFindingState walk = new PathFindingState(null, new Vector2(v2pos.x, v2pos.y));
+            JobComponent jobComponent = new JobComponent("Walk", JobComponent.JobStatus.IDLE, walk);
+            JobTypeComponent jobTypeComponent = new JobTypeComponent(JobType.HAUL);
             Entity entity = new Entity();
             entity.add(jobComponent);
+            entity.add(jobTypeComponent);
             getEngine().addEntity(entity);
         }
 

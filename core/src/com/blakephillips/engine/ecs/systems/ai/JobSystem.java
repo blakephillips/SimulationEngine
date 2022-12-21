@@ -36,6 +36,12 @@ public class JobSystem extends IteratingSystem {
                     job.setCurrentState(job.getCurrentState().getNextState());
                 }
             }
+
+            if (job.getCurrentState().stateStatus == State.StateStatus.FAILED) {
+                Gdx.app.debug("JobSystem", String.format("Job '%s' failed", job.getName()));
+                job.getStateEntity().remove(StateComponent.class);
+                job.status = JobComponent.JobStatus.INCOMPLETE;
+            }
         }
 
         //just quit cancelled and incomplete jobs for now

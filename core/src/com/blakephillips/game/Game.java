@@ -117,6 +117,14 @@ public class Game extends ApplicationAdapter {
 		engine.addEntity(jobEntity);
 
 		// adding two things to the queue
+
+		PathFindingState pathState1 = new PathFindingState(null, new Vector2(450, 450));
+		JobComponent jobComponent2 = new JobComponent("Walk somewhere or something", JobComponent.JobStatus.IDLE, pathState1);
+		Entity jobEntity2 = new Entity();
+		jobEntity2.add(jobComponent2);
+		jobEntity2.add(new JobTypeComponent(JobType.HAUL));
+		engine.addEntity(jobEntity2);
+
 		Entity jobEntity1 = new Entity();
 		PathToResourceTypeState toResourceTypeState = new PathToResourceTypeState(null, ResourceType.WOOD);
 		JobComponent jobComponent1 = new JobComponent("Haul other thing to place", JobComponent.JobStatus.IDLE, toResourceTypeState);
