@@ -32,7 +32,7 @@ public class GetResourceTypeToDestination {
         }
 
         HaulState haulState = new HaulState(actorEntity, resource, haulToPos);
-        JobComponent jobComponent = new JobComponent("Haul resource", JobComponent.JobStatus.START_PENDING, haulState);
+        JobComponent jobComponent = new JobComponent("Haul resource", JobComponent.JobStatus.IDLE, haulState);
         jobEntity.add(jobComponent);
         Orchestrator.getEngine().addEntity(jobEntity);
     }

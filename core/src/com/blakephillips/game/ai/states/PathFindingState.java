@@ -18,7 +18,7 @@ import space.earlygrey.simplegraphs.Path;
 
 public class PathFindingState extends State {
 
-    private final Vector2 destination;
+    private Vector2 destination;
     private PositionComponent positionComponent;
     private PathComponent pathComponent;
     private final int proximity = 15;
@@ -64,5 +64,9 @@ public class PathFindingState extends State {
             }
             exit();
         }
+    }
+
+    public void setDestination (Vector2 destination) {
+        this.destination = destination;
     }
 }

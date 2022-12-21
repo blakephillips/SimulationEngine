@@ -1,7 +1,6 @@
 package com.blakephillips.engine.ecs.systems.ai;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.blakephillips.engine.ai.State;
 import com.blakephillips.engine.ecs.components.ai.JobComponent;
 import com.blakephillips.engine.ecs.components.ai.StateComponent;
-import com.blakephillips.game.Orchestrator;
 
 public class JobSystem extends IteratingSystem {
 
@@ -48,6 +46,5 @@ public class JobSystem extends IteratingSystem {
             getEngine().removeEntity(entity);
             Gdx.app.log("Game", String.format("Finished job %s", job.getName()));
         }
-
     }
 }

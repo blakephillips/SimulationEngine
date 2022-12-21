@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.blakephillips.engine.ecs.components.ai.CurrentJobComponent;
 import com.blakephillips.engine.ecs.components.ai.JobComponent;
 import com.blakephillips.engine.ecs.components.gfx.DisplayFpsComponent;
 import com.blakephillips.engine.ecs.components.gfx.TextComponent;
@@ -30,8 +31,12 @@ import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.engine.utilities.sprite.SpriteSheet;
 import com.blakephillips.game.ai.states.HaulState;
 import com.blakephillips.game.ai.states.PathFindingState;
+import com.blakephillips.game.ai.states.PathToResourceTypeState;
+import com.blakephillips.game.data.JobType;
 import com.blakephillips.game.data.ResourceType;
+import com.blakephillips.game.ecs.components.JobTypeComponent;
 import com.blakephillips.game.ecs.components.ResourceComponent;
+import com.blakephillips.game.ecs.systems.QueueSystem;
 import com.blakephillips.game.ecs.systems.ResourceSystem;
 import com.blakephillips.game.ui.TileSelector;
 
@@ -74,6 +79,7 @@ public class Game extends ApplicationAdapter {
 		engine.addSystem(new TextureDirectionSystem());
 		engine.addSystem(new ResourceSystem());
 		engine.addSystem(new JobSystem());
+		engine.addSystem(new QueueSystem());
 		new TileSelector();
 
 		//display fps
@@ -83,29 +89,42 @@ public class Game extends ApplicationAdapter {
 		fps.add(new DisplayFpsComponent());
 		engine.addEntity(fps);
 
+		// don't look below, this is gross random testing
+
 		//testing hauling
 		Entity c = new Character(new Vector2(50, 50), engine).entity;
 		Entity haulObject = new Entity();
 		SpriteSheet spriteSheet = new SpriteSheet("tileset_grassland.png", 16, 16);
 		TextureRegion spr = spriteSheet.getTextureFromTileMap(0, 8);
-
 		haulObject.add(new TextureComponent(spr, 0));
 		haulObject.add(new PositionComponent(new Vector2(250, 250)));
 
 		engine.addEntity(haulObject);
 		//job system testing
-		HaulState haulState = new HaulState(c, haulObject, new Vector2(50, 50));
-		PathFindingState pathState = new PathFindingState(c, new Vector2(450, 450));
-		PathFindingState pathState2 = new PathFindingState(c, new Vector2(300, 300));
-		HaulState haulState2 = new HaulState(c, haulObject, new Vector2(450, 450));
+		HaulState haulState = new HaulState(null, haulObject, new Vector2(50, 50));
+		PathFindingState pathState = new PathFindingState(null, new Vector2(450, 450));
+		PathFindingState pathState2 = new PathFindingState(null, new Vector2(300, 300));
+		HaulState haulState2 = new HaulState(null, haulObject, new Vector2(450, 450));
 		haulState.setNextState(pathState);
 		pathState.setNextState(pathState2);
 		pathState2.setNextState(haulState2);
 
-		JobComponent jobComponent = new JobComponent("Haul to place", JobComponent.JobStatus.START_PENDING, haulState);
+		JobComponent jobComponent = new JobComponent("Haul to place", JobComponent.JobStatus.IDLE, haulState);
 		Entity jobEntity = new Entity();
 		jobEntity.add(jobComponent);
+		jobEntity.add(new JobTypeComponent(JobType.HAUL));
+		c.add(new CurrentJobComponent(null));
 		engine.addEntity(jobEntity);
+
+		// adding two things to the queue
+		Entity jobEntity1 = new Entity();
+		PathToResourceTypeState toResourceTypeState = new PathToResourceTypeState(null, ResourceType.WOOD);
+		JobComponent jobComponent1 = new JobComponent("Haul other thing to place", JobComponent.JobStatus.IDLE, toResourceTypeState);
+		jobEntity1.add(new JobTypeComponent(JobType.HAUL));
+		jobEntity1.add(jobComponent1);
+		engine.addEntity(jobEntity1);
+
+		character.entity.add(new CurrentJobComponent(null));
 
 		//item testing
 		SpriteSheet sprites = new SpriteSheet("sprites.png", 16, 16);

@@ -35,6 +35,14 @@ public class JobComponent implements Component {
         currentState = state;
     }
 
+    public void setLastState(State state) {
+        State currentState = rootState;
+        while (currentState.getNextState() != null) {
+            currentState = currentState.getNextState();
+        }
+        currentState.setNextState(state);
+    }
+
     public Entity getStateEntity() {
         return stateEntity;
     }

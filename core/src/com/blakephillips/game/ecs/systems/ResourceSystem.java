@@ -1,15 +1,10 @@
 package com.blakephillips.game.ecs.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.Gdx;
 import com.blakephillips.engine.ecs.components.ai.ReservedComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.systems.PathFollowingSystem;
-import com.blakephillips.engine.ecs.systems.gfx.TilemapRenderSystem;
 import com.blakephillips.engine.utilities.grid.Pathfinding;
 import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.game.Orchestrator;
@@ -21,25 +16,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ResourceSystem extends IteratingSystem {
+import static com.blakephillips.game.Orchestrator.getEngine;
 
+public class ResourceSystem extends EntitySystem {
     private final ComponentMapper<ResourceComponent> resourceComponents = ComponentMapper.getFor(ResourceComponent.class);
     private final ComponentMapper<ReservedComponent> reservedComponents = ComponentMapper.getFor(ReservedComponent.class);
     private final ComponentMapper<PositionComponent> positionComponents = ComponentMapper.getFor(PositionComponent.class);
     private final Map<ResourceType, Set<Entity>> resources = new HashMap<>();
+
     public ResourceSystem() {
-        super(Family.all(ResourceComponent.class).get());
-    }
-
-    @Override
-    protected void processEntity(Entity entity, float v) {
-        ResourceComponent resourceComponent = resourceComponents.get(entity);
-
-        if (!resources.containsKey(resourceComponent.getType())) {
-            resources.put(resourceComponent.getType(), new HashSet<>());
-        }
-
-        resources.get(resourceComponent.getType()).add(entity);
+        Orchestrator.getEngine().addEntityListener(Family.all(ResourceComponent.class).get(), new ResourceListener());
     }
 
     public Set<Entity> getAllResourcesOfType(ResourceType resourceType) {
@@ -50,7 +36,7 @@ public class ResourceSystem extends IteratingSystem {
     public Entity getClosestReachableResourceOfType(ResourceType resourceType, PositionComponent positionComponent) {
         Set<Entity> entities = this.getAllResourcesOfType(resourceType);
         Entity closestEntity = null;
-         Engine engine = Orchestrator.getEngine();
+        Engine engine = Orchestrator.getEngine();
         if (entities == null || entities.isEmpty()) { return null; }
         for (Entity entity: entities) {
             if (reservedComponents.has(entity)) {
@@ -90,4 +76,42 @@ public class ResourceSystem extends IteratingSystem {
         return closestEntity;
     }
 
+    public void addResource(Entity entity) {
+        if (!hasResourceComponent(entity)) { return; }
+        ResourceComponent resourceComponent = resourceComponents.get(entity);
+        if (!resources.containsKey(resourceComponent.getType())) {
+            resources.put(resourceComponent.getType(), new HashSet<>());
+        }
+
+        resources.get(resourceComponent.getType()).add(entity);
+    }
+
+    public void removeResource(Entity entity) {
+        if (!hasResourceComponent(entity)) { return; }
+        ResourceComponent resourceComponent = resourceComponents.get(entity);
+        if (!resources.containsKey(resourceComponent.getType())) {
+            return;
+        }
+        resources.get(resourceComponent.getType()).remove(entity);
+    }
+
+    private boolean hasResourceComponent(Entity entity) {
+        if (!resourceComponents.has(entity)) {
+            Gdx.app.error("ResourceSystem", "Resource doesn't have ResourceComponent");
+            return false;
+        }
+        return true;
+    }
+}
+
+class ResourceListener implements EntityListener {
+    @Override
+    public void entityAdded(Entity entity) {
+        getEngine().getSystem(ResourceSystem.class).addResource(entity);
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        getEngine().getSystem(ResourceSystem.class).removeResource(entity);
+    }
 }

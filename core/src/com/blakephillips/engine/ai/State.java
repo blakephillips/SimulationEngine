@@ -13,6 +13,15 @@ public abstract class State {
         this.entity = entity;
     }
 
+    public void setAllEntities(Entity entity) {
+        State state = this;
+        state.entity = entity;
+        while (state.getNextState() != null) {
+            state = state.getNextState();
+            state.entity = entity;
+        }
+    }
+
     public abstract void enter();
     public void exit() {
         stateStatus = StateStatus.COMPLETE;
