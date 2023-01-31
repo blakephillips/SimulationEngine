@@ -46,7 +46,7 @@ public class DebugSystem extends EntitySystem {
     public void update(float deltaTime) {
         v2pos = getEngine().getSystem(MousePositionSystem.class).unprojectedMousePos();
         //temporary wall creation to test A*
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.isTouched() && !Orchestrator.gameIgnoreInput) {
             TiledMapTileLayer collision = (TiledMapTileLayer)tileMap.map.getLayers().get("collision");
 
             Vertex vertex = tileMap.worldToCellIndex(v2pos);
@@ -57,7 +57,7 @@ public class DebugSystem extends EntitySystem {
             collision.setCell(vertex.x, vertex.y, cell);
         }
 
-        if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+        if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && !Orchestrator.gameIgnoreInput) {
 
             TiledMapTileLayer collision = (TiledMapTileLayer)tileMap.map.getLayers().get("collision");
             Vertex vertex = tileMap.worldToCellIndex(v2pos);
@@ -66,22 +66,22 @@ public class DebugSystem extends EntitySystem {
             collision.setCell(vertex.x, vertex.y, null);
         }
         //temporary pathfinding test
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F) && !Orchestrator.gameIgnoreInput) {
             Vertex destination = tileMap.worldToCellIndex(v2pos);
             Vertex pos = tileMap.worldToCellIndex(testEntity.getComponent(PositionComponent.class).pos);
             testEntity.add(new PathComponent(Pathfinding.getPath(pos, destination, tileMap.graph.graph)));
         }
         //temporary hauling test
-        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H) && !Orchestrator.gameIgnoreInput) {
             testEntity.add(new StateComponent(new HaulState(testEntity, testHaulEntity, v2pos)));
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.J) && !Orchestrator.gameIgnoreInput) {
             new GetResourceTypeToDestination(testEntity, v2pos, ResourceType.WOOD);
 
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E) && !Orchestrator.gameIgnoreInput) {
             PathFindingState walk = new PathFindingState(null, new Vector2(v2pos.x, v2pos.y));
             JobComponent jobComponent = new JobComponent("Walk", JobComponent.JobStatus.IDLE, walk);
             JobTypeComponent jobTypeComponent = new JobTypeComponent(JobType.HAUL);

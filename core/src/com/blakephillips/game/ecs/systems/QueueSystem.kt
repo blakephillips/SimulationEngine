@@ -35,12 +35,9 @@ class QueueSystem : EntitySystem() {
             val assignableEntity = entities!![i]
             val currentJobComponent = currentJobComponents[assignableEntity]
             // if the current job is running / in any non-finished state, skip
-            if (currentJobComponent.currentJob != null) {
-                if (currentJobComponent.currentJob.status == JobComponent.JobStatus.RUNNING ||
-                    currentJobComponent.currentJob.status == JobComponent.JobStatus.START_PENDING
-                ) {
-                    continue
-                }
+            when (currentJobComponent.currentJob?.status) {
+                JobComponent.JobStatus.RUNNING, JobComponent.JobStatus.START_PENDING -> continue
+                else -> {}
             }
             currentJobComponent.currentJob = null
             for ((jobType, jobQueue) in queue) {
@@ -63,12 +60,16 @@ class QueueSystem : EntitySystem() {
     }
 
     fun addJob(entity: Entity) {
-        if (!hasJobComponent(entity)) {
-            return
+        when {
+            !hasJobTypeComponent(entity) -> {
+                Gdx.app.error("QueueSystem", "Job was added without JobType, removing from Engine")
+                engine.removeEntity(entity)
+                return
+            }
+
+            else -> {}
         }
-        if (!hasJobTypeComponent(entity)) {
-            return
-        }
+
         val jobComponent = jobComponents[entity]
         if (jobComponent.status != JobComponent.JobStatus.IDLE) {
             Gdx.app.debug(
@@ -90,20 +91,15 @@ class QueueSystem : EntitySystem() {
         Gdx.app.debug("QueueSystem", String.format("Added job: '%s' to queue", jobComponent.name))
     }
 
-    private fun hasJobComponent(entity: Entity): Boolean {
-        if (!jobComponents.has(entity)) {
-            Gdx.app.error("QueueSystem", "Job doesn't have JobComponent")
-            return false
-        }
-        return true
-    }
-
     private fun hasJobTypeComponent(entity: Entity): Boolean {
-        if (!jobTypeComponents.has(entity)) {
-            Gdx.app.error("QueueSystem", "Job doesn't have JobTypeComponent")
-            return false
+        return when {
+            !jobTypeComponents.has(entity) -> {
+                Gdx.app.error("QueueSystem", "Job doesn't have JobTypeComponent")
+                false
+            }
+
+            else -> true
         }
-        return true
     }
 }
 

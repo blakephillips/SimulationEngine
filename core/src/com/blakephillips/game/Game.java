@@ -38,6 +38,7 @@ import com.blakephillips.game.ecs.components.JobTypeComponent;
 import com.blakephillips.game.ecs.components.ResourceComponent;
 import com.blakephillips.game.ecs.systems.QueueSystem;
 import com.blakephillips.game.ecs.systems.ResourceSystem;
+import com.blakephillips.game.stage.GameUserInterfaceStage;
 import com.blakephillips.game.ui.TileSelector;
 
 public class Game extends ApplicationAdapter {
@@ -47,6 +48,7 @@ public class Game extends ApplicationAdapter {
 	Viewport viewport;
 
 	TileMap tilemap;
+	GameUserInterfaceStage gameUserInterfaceStage;
 
 	@Override
 	public void create () {
@@ -54,6 +56,8 @@ public class Game extends ApplicationAdapter {
 		camera.position.set(320, 240, 0);
 		camera.setToOrtho(false, 680, 480);
 		viewport = new FitViewport(640, 480, camera);
+
+		gameUserInterfaceStage = new GameUserInterfaceStage(viewport);
 
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		batch = new SpriteBatch();
@@ -164,10 +168,13 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 		engine.update(Gdx.graphics.getDeltaTime());
 		batch.end();
+		gameUserInterfaceStage.stage.act(Gdx.graphics.getDeltaTime());
+		gameUserInterfaceStage.stage.draw();
 	}
 
 	@Override
 	public void dispose () {
+		gameUserInterfaceStage.stage.dispose();
 		batch.dispose();
 	}
 

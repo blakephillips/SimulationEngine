@@ -8,7 +8,9 @@ import com.blakephillips.engine.ecs.components.ai.JobComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.game.Orchestrator;
 import com.blakephillips.game.ai.states.HaulState;
+import com.blakephillips.game.data.JobType;
 import com.blakephillips.game.data.ResourceType;
+import com.blakephillips.game.ecs.components.JobTypeComponent;
 import com.blakephillips.game.ecs.systems.ResourceSystem;
 
 public class GetResourceTypeToDestination {
@@ -31,9 +33,11 @@ public class GetResourceTypeToDestination {
             return;
         }
 
+
         HaulState haulState = new HaulState(actorEntity, resource, haulToPos);
         JobComponent jobComponent = new JobComponent("Haul resource", JobComponent.JobStatus.IDLE, haulState);
         jobEntity.add(jobComponent);
+        jobEntity.add(new JobTypeComponent(JobType.HAUL));
         Orchestrator.getEngine().addEntity(jobEntity);
     }
 

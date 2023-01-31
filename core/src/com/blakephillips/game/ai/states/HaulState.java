@@ -87,14 +87,14 @@ public class HaulState extends State {
         entity.add(pathComponent);
         haulEntity.add(new ReservedComponent(entity));
         haulStatus = HaulStatus.TRAVELLING_TO_OBJECT;
-        stateStatus = StateStatus.RUNNING;
+        setStateStatus(StateStatus.RUNNING);
     }
 
     @Override
     public void exit() {
         Gdx.app.log("Game", "Haul state exited");
         haulEntity.remove(ReservedComponent.class);
-        stateStatus = StateStatus.COMPLETE;
+        setStateStatus(StateStatus.COMPLETE);
         haulStatus = HaulStatus.DONE;
     }
 

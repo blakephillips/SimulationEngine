@@ -6,7 +6,7 @@ import com.blakephillips.engine.ecs.components.ai.ReservedComponent;
 
 public abstract class State {
     public Entity entity;
-    public StateStatus stateStatus = StateStatus.IDLE;
+    private StateStatus stateStatus = StateStatus.IDLE;
     private State previousState = null;
     private State nextState = null;
     public State(Entity entity) {
@@ -65,6 +65,12 @@ public abstract class State {
     public State getNextState() {
         return nextState;
     }
+
+    public void setStateStatus(StateStatus status) {
+        this.stateStatus = status;
+    }
+
+    public StateStatus getStateStatus() { return stateStatus; }
 
     public enum StateStatus {
         IDLE,

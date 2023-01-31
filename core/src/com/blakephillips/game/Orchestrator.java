@@ -11,4 +11,6 @@ public class Orchestrator {
         return engine;
     }
 
+    public static boolean gameIgnoreInput = false;
+
 }

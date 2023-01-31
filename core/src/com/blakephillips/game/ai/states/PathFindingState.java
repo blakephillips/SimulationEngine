@@ -46,18 +46,18 @@ public class PathFindingState extends State {
         Path<Vertex> vertexPath = Pathfinding.getPath(positionComponent.pos, destination, tileMap);
         pathComponent = new PathComponent(vertexPath);
         entity.add(pathComponent);
-        stateStatus = StateStatus.RUNNING;
+        setStateStatus(StateStatus.RUNNING);
     }
 
     @Override
     public void exit() {
-        stateStatus = StateStatus.COMPLETE;
+        setStateStatus(StateStatus.COMPLETE);
         Gdx.app.log("Game", "Exited path finding state");
     }
 
     @Override
     public void update(float deltaTime) {
-        if (stateStatus == StateStatus.RUNNING && !pathComponents.has(entity)) {
+        if (getStateStatus() == StateStatus.RUNNING && !pathComponents.has(entity)) {
             if (Pathfinding.chebyshevDistance(positionComponent.pos, destination) > proximity) {
                 exit(true);
                 return;

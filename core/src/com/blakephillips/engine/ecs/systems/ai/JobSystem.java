@@ -25,7 +25,7 @@ public class JobSystem extends IteratingSystem {
         }
 
         if (job.status == JobComponent.JobStatus.RUNNING) {
-            if (job.getCurrentState().stateStatus == State.StateStatus.COMPLETE) {
+            if (job.getCurrentState().getStateStatus() == State.StateStatus.COMPLETE) {
                 if (job.getCurrentState().getNextState() == null) {
                     job.getStateEntity().remove(StateComponent.class);
                     job.status = JobComponent.JobStatus.FINISHED;
@@ -37,7 +37,7 @@ public class JobSystem extends IteratingSystem {
                 }
             }
 
-            if (job.getCurrentState().stateStatus == State.StateStatus.FAILED) {
+            if (job.getCurrentState().getStateStatus() == State.StateStatus.FAILED) {
                 Gdx.app.debug("JobSystem", String.format("Job '%s' failed", job.getName()));
                 job.getStateEntity().remove(StateComponent.class);
                 job.status = JobComponent.JobStatus.INCOMPLETE;
