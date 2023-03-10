@@ -23,6 +23,7 @@ import com.blakephillips.game.ai.jobs.GetResourceTypeToDestination;
 import com.blakephillips.game.ai.states.PathFindingState;
 import com.blakephillips.game.data.JobType;
 import com.blakephillips.game.data.ResourceType;
+import com.blakephillips.game.data.UIState;
 import com.blakephillips.game.ecs.components.JobTypeComponent;
 
 public class DebugSystem extends EntitySystem {
@@ -44,6 +45,7 @@ public class DebugSystem extends EntitySystem {
     private Vector2 v2pos;
     @Override
     public void update(float deltaTime) {
+        if (Orchestrator.uiState != UIState.DEFAULT) { return; }
         v2pos = getEngine().getSystem(MousePositionSystem.class).unprojectedMousePos();
         //temporary wall creation to test A*
         if (Gdx.input.isTouched() && !Orchestrator.gameIgnoreInput) {

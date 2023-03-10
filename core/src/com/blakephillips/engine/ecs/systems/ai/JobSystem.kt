@@ -1,56 +1,52 @@
-package com.blakephillips.engine.ecs.systems.ai;
+package com.blakephillips.engine.ecs.systems.ai
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
-import com.blakephillips.engine.ai.State;
-import com.blakephillips.engine.ecs.components.ai.JobComponent;
-import com.blakephillips.engine.ecs.components.ai.StateComponent;
+import com.badlogic.ashley.core.ComponentMapper
+import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.Family
+import com.badlogic.ashley.systems.IteratingSystem
+import com.badlogic.gdx.Gdx
+import com.blakephillips.engine.ai.State
+import com.blakephillips.engine.ai.State.StateStatus
+import com.blakephillips.engine.ecs.components.ai.JobComponent
+import com.blakephillips.engine.ecs.components.ai.StateComponent
 
-public class JobSystem extends IteratingSystem {
+class JobSystem : IteratingSystem(Family.all(JobComponent::class.java).get()) {
+    private var jobComponents = ComponentMapper.getFor(JobComponent::class.java)
+    override fun processEntity(entity: Entity, v: Float) {
+        val job = jobComponents[entity]
 
-    ComponentMapper<JobComponent> jobComponents = ComponentMapper.getFor(JobComponent.class);
-    public JobSystem() {
-        super(Family.all(JobComponent.class).get());
-    }
-    @Override
-    protected void processEntity(Entity entity, float v) {
-        JobComponent job = jobComponents.get(entity);
-        if (job.status == JobComponent.JobStatus.START_PENDING) {
-            job.getStateEntity().add(new StateComponent(job.getCurrentState()));
-            getEngine().addEntity(job.getStateEntity());
-            job.status = JobComponent.JobStatus.RUNNING;
-        }
-
-        if (job.status == JobComponent.JobStatus.RUNNING) {
-            if (job.getCurrentState().getStateStatus() == State.StateStatus.COMPLETE) {
-                if (job.getCurrentState().getNextState() == null) {
-                    job.getStateEntity().remove(StateComponent.class);
-                    job.status = JobComponent.JobStatus.FINISHED;
-                }
-
-                if (job.getCurrentState().getNextState() != null) {
-                    job.getStateEntity().add(new StateComponent(job.getCurrentState().getNextState()));
-                    job.setCurrentState(job.getCurrentState().getNextState());
+        when (job.status) {
+            JobComponent.JobStatus.START_PENDING -> {
+                job.stateEntity.add(StateComponent(job.currentState))
+                engine.addEntity(job.stateEntity)
+                job.status = JobComponent.JobStatus.RUNNING
+            }
+            JobComponent.JobStatus.RUNNING -> {
+                when (job.currentState.stateStatus) {
+                    StateStatus.COMPLETE -> {
+                        if (job.currentState.nextState == null) {
+                            job.stateEntity.remove(StateComponent::class.java)
+                            job.status = JobComponent.JobStatus.FINISHED
+                        }
+                        if (job.currentState.nextState != null) {
+                            job.stateEntity.add(StateComponent(job.currentState.nextState))
+                            job.currentState = job.currentState.nextState
+                        }
+                    }
+                    StateStatus.FAILED -> {
+                        Gdx.app.debug("JobSystem", "Job '${job.name}' failed")
+                        job.stateEntity.remove(StateComponent::class.java)
+                        job.status = JobComponent.JobStatus.INCOMPLETE
+                    }
+                    else -> {}
                 }
             }
-
-            if (job.getCurrentState().getStateStatus() == State.StateStatus.FAILED) {
-                Gdx.app.debug("JobSystem", String.format("Job '%s' failed", job.getName()));
-                job.getStateEntity().remove(StateComponent.class);
-                job.status = JobComponent.JobStatus.INCOMPLETE;
+            JobComponent.JobStatus.FINISHED, JobComponent.JobStatus.CANCELLED, JobComponent.JobStatus.INCOMPLETE -> {
+                engine.removeEntity(job.stateEntity)
+                engine.removeEntity(entity)
+                Gdx.app.log("Game", "Finished job ${job.name}")
             }
-        }
-
-        //just quit cancelled and incomplete jobs for now
-        if (job.status == JobComponent.JobStatus.FINISHED
-                || job.status == JobComponent.JobStatus.CANCELLED
-                || job.status == JobComponent.JobStatus.INCOMPLETE) {
-            getEngine().removeEntity(job.getStateEntity());
-            getEngine().removeEntity(entity);
-            Gdx.app.log("Game", String.format("Finished job %s", job.getName()));
+            JobComponent.JobStatus.IDLE, null -> {}
         }
     }
 }

@@ -38,6 +38,7 @@ import com.blakephillips.game.ecs.components.JobTypeComponent;
 import com.blakephillips.game.ecs.components.ResourceComponent;
 import com.blakephillips.game.ecs.systems.QueueSystem;
 import com.blakephillips.game.ecs.systems.ResourceSystem;
+import com.blakephillips.game.entity.Tree;
 import com.blakephillips.game.stage.GameUserInterfaceStage;
 import com.blakephillips.game.ui.TileSelector;
 
@@ -152,6 +153,9 @@ public class Game extends ApplicationAdapter {
 		log2.add(new PositionComponent(new Vector2(16*10, 16*10)));
 		log2.add(new ResourceComponent(ResourceType.WOOD));
 		engine.addEntity(log2);
+
+		//tree
+		new Tree(new Vector2(16*8, 16*8));
 
 
 		engine.addSystem(new DebugSystem(tilemap, character.entity, haulObject, c));
