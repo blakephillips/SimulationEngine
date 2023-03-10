@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.blakephillips.engine.ecs.components.ai.CurrentJobComponent;
 import com.blakephillips.engine.ecs.components.gfx.DirectionalTextureComponent;
 import com.blakephillips.engine.ecs.components.gfx.TextureComponent;
 import com.blakephillips.engine.ecs.components.position.DirectionComponent;
@@ -25,6 +26,7 @@ public class Character {
         entity.add(new TextureComponent(spr_west, 0));
         entity.add(new DirectionalTextureComponent(spr_north, spr_east, spr_south, spr_west));
         entity.add(new DirectionComponent(Direction.WEST));
+        entity.add(new CurrentJobComponent(null));
 
         engine.addEntity(entity);
     }

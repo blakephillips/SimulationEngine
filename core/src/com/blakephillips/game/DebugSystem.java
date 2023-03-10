@@ -25,6 +25,7 @@ import com.blakephillips.game.data.JobType;
 import com.blakephillips.game.data.ResourceType;
 import com.blakephillips.game.data.UIState;
 import com.blakephillips.game.ecs.components.JobTypeComponent;
+import com.blakephillips.game.ecs.systems.QueueSystem;
 
 public class DebugSystem extends EntitySystem {
     //temp
@@ -70,12 +71,23 @@ public class DebugSystem extends EntitySystem {
         //temporary pathfinding test
         if (Gdx.input.isKeyJustPressed(Input.Keys.F) && !Orchestrator.gameIgnoreInput) {
             Vertex destination = tileMap.worldToCellIndex(v2pos);
-            Vertex pos = tileMap.worldToCellIndex(testEntity.getComponent(PositionComponent.class).pos);
-            testEntity.add(new PathComponent(Pathfinding.getPath(pos, destination, tileMap.graph.graph)));
+
+            PathFindingState walk = new PathFindingState(null, new Vector2(v2pos.x, v2pos.y));
+            JobComponent job = new JobComponent("Walk", JobComponent.JobStatus.IDLE, walk);
+            JobTypeComponent jobType = new JobTypeComponent(JobType.HAUL);
+            Entity entity = new Entity();
+            entity.add(job);
+            entity.add(jobType);
+            Orchestrator.getEngine().addEntity(entity);
         }
         //temporary hauling test
         if (Gdx.input.isKeyJustPressed(Input.Keys.H) && !Orchestrator.gameIgnoreInput) {
             testEntity.add(new StateComponent(new HaulState(testEntity, testHaulEntity, v2pos)));
+        }
+
+        //temporary hauling test
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C) && !Orchestrator.gameIgnoreInput) {
+            Orchestrator.getEngine().getSystem(QueueSystem.class).clearQueue();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.J) && !Orchestrator.gameIgnoreInput) {

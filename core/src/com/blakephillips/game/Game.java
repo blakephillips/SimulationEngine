@@ -118,7 +118,6 @@ public class Game extends ApplicationAdapter {
 		Entity jobEntity = new Entity();
 		jobEntity.add(jobComponent);
 		jobEntity.add(new JobTypeComponent(JobType.HAUL));
-		c.add(new CurrentJobComponent(null));
 		engine.addEntity(jobEntity);
 
 		// adding two things to the queue
@@ -136,8 +135,6 @@ public class Game extends ApplicationAdapter {
 		jobEntity1.add(new JobTypeComponent(JobType.HAUL));
 		jobEntity1.add(jobComponent1);
 		engine.addEntity(jobEntity1);
-
-		character.entity.add(new CurrentJobComponent(null));
 
 		//item testing
 		SpriteSheet sprites = new SpriteSheet("sprites.png", 16, 16);

@@ -91,6 +91,13 @@ class QueueSystem : EntitySystem() {
         Gdx.app.debug("QueueSystem", String.format("Added job: '%s' to queue", jobComponent.name))
     }
 
+    fun clearQueue() {
+        for (jobQueuePair in queue) {
+            jobQueuePair.value.clear()
+        }
+        Gdx.app.debug("QueueSystem", "Cleared Queue")
+    }
+
     private fun hasJobTypeComponent(entity: Entity): Boolean {
         return when {
             !jobTypeComponents.has(entity) -> {
