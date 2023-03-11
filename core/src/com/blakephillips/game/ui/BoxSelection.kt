@@ -3,8 +3,13 @@ package com.blakephillips.game.ui
 import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.blakephillips.engine.ecs.components.gfx.ShapeComponent
+import com.blakephillips.engine.ecs.components.gfx.TextureComponent
+import com.blakephillips.engine.ecs.components.position.PositionComponent
 import com.blakephillips.engine.utilities.shape.Box
 import com.blakephillips.game.Orchestrator
 import com.blakephillips.game.data.ObjectType
@@ -12,10 +17,11 @@ import com.blakephillips.game.ecs.components.SelectableComponent
 
 class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?) {
     private val endPos = Vector2(startPos.x, startPos.y)
-    val selectedEntities: HashSet<Entity> = hashSetOf()
+    val selectedEntities: HashMap<Entity, Entity> = hashMapOf()
     val box = Box(startPos, endPos)
     var shapeComponent: ShapeComponent? = null
     val entity: Entity = Entity()
+    var selectedTileRegion = TextureRegion(Texture(Gdx.files.internal("tile_selector.png")))
 
     fun setStartPosition(x: Float, y: Float) {
         startPos.x = x
@@ -29,10 +35,25 @@ class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?
         val selectable = getSelectableEntities()
 
         for (entity in selectable) {
+            clear()
             val selectableComponent = selectableComponents[entity]
             val pos = selectableComponent.pos.pos
             selectableComponent.selected = box.contains(pos)
+            if (selectableComponent.selected && !selectedEntities.containsKey(entity)) {
+                val selectedEntity = Entity()
+                selectedEntity.add(TextureComponent(selectedTileRegion, 1))
+                selectedEntity.add(PositionComponent(pos))
+                selectedEntities[entity] = selectedEntity
+                Orchestrator.engine.addEntity(selectedEntity)
+            }
         }
+    }
+
+    fun clear() {
+        for (entityPair in selectedEntities) {
+            Orchestrator.engine.removeEntity(entityPair.value)
+        }
+        selectedEntities.clear()
     }
 
     fun visible() {

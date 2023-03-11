@@ -10,7 +10,7 @@ import com.blakephillips.game.data.UIState
 import com.blakephillips.game.ui.BoxSelection
 
 class InputSystem: EntitySystem() {
-    var boxSelector: BoxSelection = BoxSelection(Vector2(0f,0f), ObjectType.TREE)
+    var boxSelector = BoxSelection(Vector2(0f,0f), ObjectType.TREE)
     val mouseSystem = Orchestrator.engine.getSystem(MousePositionSystem::class.java)
     override fun update(deltaTime: Float) {
 
@@ -27,13 +27,10 @@ class InputSystem: EntitySystem() {
             }
             else {
                 boxSelector.remove()
+                boxSelector.clear()
             }
 
         }
 
-    }
-
-    companion object {
-        private lateinit var boxSelector: BoxSelection
     }
 }
