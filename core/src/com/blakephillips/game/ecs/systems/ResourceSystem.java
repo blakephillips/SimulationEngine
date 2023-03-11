@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.blakephillips.game.Orchestrator.getEngine;
+import static com.blakephillips.game.Orchestrator.engine;
 
 public class ResourceSystem extends EntitySystem {
     private final ComponentMapper<ResourceComponent> resourceComponents = ComponentMapper.getFor(ResourceComponent.class);
@@ -25,7 +25,7 @@ public class ResourceSystem extends EntitySystem {
     private final Map<ResourceType, Set<Entity>> resources = new HashMap<>();
 
     public ResourceSystem() {
-        Orchestrator.getEngine().addEntityListener(Family.all(ResourceComponent.class).get(), new ResourceListener());
+        Orchestrator.engine.addEntityListener(Family.all(ResourceComponent.class).get(), new ResourceListener());
     }
 
     public Set<Entity> getAllResourcesOfType(ResourceType resourceType) {
@@ -36,7 +36,7 @@ public class ResourceSystem extends EntitySystem {
     public Entity getClosestReachableResourceOfType(ResourceType resourceType, PositionComponent positionComponent) {
         Set<Entity> entities = this.getAllResourcesOfType(resourceType);
         Entity closestEntity = null;
-        Engine engine = Orchestrator.getEngine();
+        Engine engine = Orchestrator.engine;
         if (entities == null || entities.isEmpty()) { return null; }
         for (Entity entity: entities) {
             if (reservedComponents.has(entity)) {
@@ -107,11 +107,11 @@ public class ResourceSystem extends EntitySystem {
 class ResourceListener implements EntityListener {
     @Override
     public void entityAdded(Entity entity) {
-        getEngine().getSystem(ResourceSystem.class).addResource(entity);
+        engine.getSystem(ResourceSystem.class).addResource(entity);
     }
 
     @Override
     public void entityRemoved(Entity entity) {
-        getEngine().getSystem(ResourceSystem.class).removeResource(entity);
+        engine.getSystem(ResourceSystem.class).removeResource(entity);
     }
 }

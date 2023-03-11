@@ -23,7 +23,7 @@ class QueueSystem : EntitySystem() {
     private var entities: ImmutableArray<Entity>? = null
 
     init {
-        Orchestrator.getEngine().addEntityListener(Family.all(JobComponent::class.java).get(), QueueListener())
+        Orchestrator.engine.addEntityListener(Family.all(JobComponent::class.java).get(), QueueListener())
     }
 
     override fun addedToEngine(engine: Engine) {
@@ -91,6 +91,13 @@ class QueueSystem : EntitySystem() {
         Gdx.app.debug("QueueSystem", String.format("Added job: '%s' to queue", jobComponent.name))
     }
 
+    fun clearQueue() {
+        for (jobQueuePair in queue) {
+            jobQueuePair.value.clear()
+        }
+        Gdx.app.debug("QueueSystem", "Cleared Queue")
+    }
+
     private fun hasJobTypeComponent(entity: Entity): Boolean {
         return when {
             !jobTypeComponents.has(entity) -> {
@@ -105,7 +112,7 @@ class QueueSystem : EntitySystem() {
 
 internal class QueueListener : EntityListener {
     override fun entityAdded(entity: Entity) {
-        Orchestrator.getEngine().getSystem(QueueSystem::class.java).addJob(entity)
+        Orchestrator.engine.getSystem(QueueSystem::class.java).addJob(entity)
     }
 
     override fun entityRemoved(entity: Entity) {}

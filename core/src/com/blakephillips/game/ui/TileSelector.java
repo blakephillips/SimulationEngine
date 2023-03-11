@@ -31,7 +31,7 @@ public class TileSelector {
         entity.add(new TextComponent(""));
         entity.add(new DisplayPositionComponent());
 
-        Orchestrator.getEngine().addEntity(entity);
+        Orchestrator.engine.addEntity(entity);
     }
 
 }

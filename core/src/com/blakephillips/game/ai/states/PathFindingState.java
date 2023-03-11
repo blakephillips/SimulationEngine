@@ -41,7 +41,7 @@ public class PathFindingState extends State {
         }
         positionComponent = posComponents.get(entity);
 
-        Engine engine = Orchestrator.getEngine();
+        Engine engine = Orchestrator.engine;
         TileMap tileMap = engine.getSystem(PathFollowingSystem.class).getTileMap();
         Path<Vertex> vertexPath = Pathfinding.getPath(positionComponent.pos, destination, tileMap);
         pathComponent = new PathComponent(vertexPath);
