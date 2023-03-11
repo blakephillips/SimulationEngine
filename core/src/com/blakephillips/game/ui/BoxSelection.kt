@@ -33,16 +33,16 @@ class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?
         endPos.y = y
 
         val selectable = getSelectableEntities()
-
+        clear()
         for (entity in selectable) {
-            clear()
             val selectableComponent = selectableComponents[entity]
-            val pos = selectableComponent.pos.pos
-            selectableComponent.selected = box.contains(pos)
+            val posComponent = positionComponents.get(entity)
+            selectableComponent.selected = box.contains(posComponent.pos)
             if (selectableComponent.selected && !selectedEntities.containsKey(entity)) {
-                val selectedEntity = Entity()
-                selectedEntity.add(TextureComponent(selectedTileRegion, 1))
-                selectedEntity.add(PositionComponent(pos))
+                val selectedEntity = Entity().also {
+                    it.add(TextureComponent(selectedTileRegion, 1))
+                    it.add(posComponent)
+                }
                 selectedEntities[entity] = selectedEntity
                 Orchestrator.engine.addEntity(selectedEntity)
             }
@@ -51,6 +51,7 @@ class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?
 
     fun clear() {
         for (entityPair in selectedEntities) {
+            selectableComponents[entityPair.key].selected = false
             Orchestrator.engine.removeEntity(entityPair.value)
         }
         selectedEntities.clear()
@@ -80,10 +81,14 @@ class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?
     }
 
     private fun getSelectableEntities() =
-        Orchestrator.engine.getEntitiesFor(Family.all(SelectableComponent::class.java).get())
+        Orchestrator.engine.getEntitiesFor(Family.all(
+            SelectableComponent::class.java,
+            PositionComponent::class.java
+        ).get())
 
     companion object {
         private var selectableComponents = ComponentMapper.getFor(SelectableComponent::class.java)
+        private var positionComponents = ComponentMapper.getFor(PositionComponent::class.java)
     }
 
 }

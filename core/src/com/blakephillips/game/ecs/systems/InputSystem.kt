@@ -18,6 +18,7 @@ class InputSystem: EntitySystem() {
         {
             if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
                 val mPos = mouseSystem.unprojectedMousePos()
+                boxSelector.clear()
                 boxSelector.setStartPosition(mPos.x, mPos.y)
                 boxSelector.visible(mPos.x, mPos.y)
             }
@@ -27,7 +28,6 @@ class InputSystem: EntitySystem() {
             }
             else {
                 boxSelector.remove()
-                boxSelector.clear()
             }
 
         }

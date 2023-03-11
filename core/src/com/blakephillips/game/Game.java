@@ -147,7 +147,7 @@ public class Game extends ApplicationAdapter {
 
 		//tree
 		new Tree(new Vector2(16*8, 16*8));
-
+		new Tree(new Vector2( 23*3, 23*3));
 
 		engine.addSystem(new DebugSystem(tilemap, character.entity, haulObject, c));
 

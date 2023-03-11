@@ -11,6 +11,7 @@ import com.blakephillips.engine.ecs.components.position.DirectionComponent;
 import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.utilities.Direction;
 import com.blakephillips.engine.utilities.sprite.SpriteSheet;
+import com.blakephillips.game.ecs.components.SelectableComponent;
 
 public class Character {
     Entity entity;
@@ -27,6 +28,7 @@ public class Character {
         entity.add(new DirectionalTextureComponent(spr_north, spr_east, spr_south, spr_west));
         entity.add(new DirectionComponent(Direction.WEST));
         entity.add(new CurrentJobComponent(null));
+        entity.add(new SelectableComponent(false));
 
         engine.addEntity(entity);
     }

@@ -9,14 +9,14 @@ import com.blakephillips.game.Orchestrator
 import com.blakephillips.game.ecs.components.SelectableComponent
 
 
-class Tree(private val initialPos: Vector2?) {
+class Tree(initialPos: Vector2?) {
     var pos: Vector2 = initialPos ?: Vector2(0F, 0F)
     var entity = Entity().also {
         val positionComponent = PositionComponent(pos)
         it.add(positionComponent)
         val spr = SpriteSheet("tileset_grassland.png", 32, 48)
         it.add(TextureComponent(spr.getTextureFromTileMap(1, 4), 0))
-        it.add(SelectableComponent(positionComponent))
+        it.add(SelectableComponent())
         Orchestrator.engine.addEntity(it)
     }
 }
