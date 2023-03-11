@@ -66,7 +66,7 @@ public class HaulState extends State {
         PositionComponent posComponent = posComponents.get(entity);
         PositionComponent haulPosComponent = posComponents.get(haulEntity);
 
-        Engine engine = Orchestrator.getEngine();
+        Engine engine = Orchestrator.engine;
         this.tileMap = engine.getSystem(PathFollowingSystem.class).getTileMap();
 
 

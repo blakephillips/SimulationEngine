@@ -23,7 +23,7 @@ public class GetResourceTypeToDestination {
             return;
         }
         PositionComponent actorPosition = positionComponents.get(actorEntity);
-        resourceSystem = Orchestrator.getEngine().getSystem(ResourceSystem.class);
+        resourceSystem = Orchestrator.engine.getSystem(ResourceSystem.class);
         Entity resource = resourceSystem.getClosestReachableResourceOfType(resourceType, actorPosition);
 
         Entity jobEntity = new Entity();
@@ -38,7 +38,7 @@ public class GetResourceTypeToDestination {
         JobComponent jobComponent = new JobComponent("Haul resource", JobComponent.JobStatus.IDLE, haulState);
         jobEntity.add(jobComponent);
         jobEntity.add(new JobTypeComponent(JobType.HAUL));
-        Orchestrator.getEngine().addEntity(jobEntity);
+        Orchestrator.engine.addEntity(jobEntity);
     }
 
 }

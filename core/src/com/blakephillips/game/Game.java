@@ -6,13 +6,9 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.blakephillips.engine.ecs.components.ai.CurrentJobComponent;
 import com.blakephillips.engine.ecs.components.ai.JobComponent;
 import com.blakephillips.engine.ecs.components.gfx.DisplayFpsComponent;
 import com.blakephillips.engine.ecs.components.gfx.TextComponent;
@@ -22,6 +18,7 @@ import com.blakephillips.engine.ecs.systems.PathFollowingSystem;
 import com.blakephillips.engine.ecs.systems.ai.JobSystem;
 import com.blakephillips.engine.ecs.systems.ai.StateSystem;
 import com.blakephillips.engine.ecs.systems.gfx.RenderSystem;
+import com.blakephillips.engine.ecs.systems.gfx.ShapeRenderSystem;
 import com.blakephillips.engine.ecs.systems.gfx.TextRenderSystem;
 import com.blakephillips.engine.ecs.systems.gfx.TilemapRenderSystem;
 import com.blakephillips.engine.ecs.systems.mouse.FollowMousePositionSystem;
@@ -36,6 +33,7 @@ import com.blakephillips.game.data.JobType;
 import com.blakephillips.game.data.ResourceType;
 import com.blakephillips.game.ecs.components.JobTypeComponent;
 import com.blakephillips.game.ecs.components.ResourceComponent;
+import com.blakephillips.game.ecs.systems.InputSystem;
 import com.blakephillips.game.ecs.systems.QueueSystem;
 import com.blakephillips.game.ecs.systems.ResourceSystem;
 import com.blakephillips.game.entity.Tree;
@@ -45,36 +43,30 @@ import com.blakephillips.game.ui.TileSelector;
 public class Game extends ApplicationAdapter {
 	SpriteBatch batch;
 	Engine engine;
-	OrthographicCamera camera;
-	Viewport viewport;
 
 	TileMap tilemap;
 	GameUserInterfaceStage gameUserInterfaceStage;
 
 	@Override
 	public void create () {
-		camera = new OrthographicCamera(680, 480);
-		camera.position.set(320, 240, 0);
-		camera.setToOrtho(false, 680, 480);
-		viewport = new FitViewport(640, 480, camera);
 
-		gameUserInterfaceStage = new GameUserInterfaceStage(viewport);
+		gameUserInterfaceStage = new GameUserInterfaceStage(Orchestrator.viewport);
 
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		batch = new SpriteBatch();
-		engine = Orchestrator.getEngine();
+		engine = Orchestrator.engine;
 		batch.enableBlending();
 
 		int gridHeight = 300;
 		int gridWidth = 300;
 
 		Character character = new Character(new Vector2(5, 5), engine);
-		tilemap = new TileMap(gridHeight, gridWidth, 16, 1, camera);
-		engine.addSystem(new TilemapRenderSystem(camera, tilemap.tileMapRenderer));
+		tilemap = new TileMap(gridHeight, gridWidth, 16, 1, Orchestrator.camera);
+		engine.addSystem(new TilemapRenderSystem(Orchestrator.camera, tilemap.tileMapRenderer));
 		engine.addSystem(new RenderSystem(batch));
 		engine.addSystem(new TextRenderSystem(batch));
 		engine.addSystem(new FollowMousePositionSystem());
-		engine.addSystem(new MousePositionSystem(viewport));
+		engine.addSystem(new MousePositionSystem(Orchestrator.viewport));
 		engine.addSystem(new CenterPositionSystem());
 		engine.addSystem(new SnapPositionSystem());
 		engine.addSystem(new OffsetPositionSystem());
@@ -85,6 +77,8 @@ public class Game extends ApplicationAdapter {
 		engine.addSystem(new ResourceSystem());
 		engine.addSystem(new JobSystem());
 		engine.addSystem(new QueueSystem());
+		engine.addSystem(new ShapeRenderSystem(batch));
+		engine.addSystem(new InputSystem());
 		new TileSelector();
 
 		//display fps
@@ -163,9 +157,9 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.setProjectionMatrix(camera.combined);
-		batch.setTransformMatrix(camera.view);
-		camera.update();
+		batch.setProjectionMatrix(Orchestrator.camera.combined);
+		batch.setTransformMatrix(Orchestrator.camera.view);
+		Orchestrator.camera.update();
 		batch.begin();
 		engine.update(Gdx.graphics.getDeltaTime());
 		batch.end();
@@ -181,8 +175,8 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void resize(int width, int height) {
-		viewport.update(width, height);
-		camera.update();
+		Orchestrator.viewport.update(width, height);
+		Orchestrator.camera.update();
 	}
 
 }

@@ -39,7 +39,7 @@ public class PathToResourceTypeState extends State {
             return;
         }
 
-        Entity resource = Orchestrator.getEngine().getSystem(ResourceSystem.class).getClosestReachableResourceOfType(resourceType, positionComponents.get(entity));
+        Entity resource = Orchestrator.engine.getSystem(ResourceSystem.class).getClosestReachableResourceOfType(resourceType, positionComponents.get(entity));
         pathFindingState.entity = entity;
         pathFindingState.setDestination(positionComponents.get(resource).pos);
         exit();

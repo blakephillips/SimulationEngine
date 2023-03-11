@@ -67,6 +67,7 @@ public abstract class State {
     }
 
     public void setStateStatus(StateStatus status) {
+        if (this.stateStatus == StateStatus.FAILED || this.stateStatus == StateStatus.COMPLETE ) { return; }
         this.stateStatus = status;
     }
 

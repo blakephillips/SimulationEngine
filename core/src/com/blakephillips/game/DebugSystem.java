@@ -9,17 +9,14 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
-import com.blakephillips.engine.ecs.components.PathComponent;
 import com.blakephillips.engine.ecs.components.ai.JobComponent;
 import com.blakephillips.engine.ecs.components.ai.StateComponent;
-import com.blakephillips.engine.ecs.components.position.PositionComponent;
 import com.blakephillips.engine.ecs.systems.mouse.MousePositionSystem;
-import com.blakephillips.engine.utilities.grid.Pathfinding;
 import com.blakephillips.engine.utilities.grid.TileMap;
 import com.blakephillips.engine.utilities.grid.Vertex;
 import com.blakephillips.engine.utilities.sprite.SpriteSheet;
+import com.blakephillips.game.ai.states.DeferrableHaulState;
 import com.blakephillips.game.ai.states.HaulState;
-import com.blakephillips.game.ai.jobs.GetResourceTypeToDestination;
 import com.blakephillips.game.ai.states.PathFindingState;
 import com.blakephillips.game.data.JobType;
 import com.blakephillips.game.data.ResourceType;
@@ -43,11 +40,10 @@ public class DebugSystem extends EntitySystem {
         region = spriteSheet.getTextureFromTileMap(0, 8);
     }
 
-    private Vector2 v2pos;
     @Override
     public void update(float deltaTime) {
         if (Orchestrator.uiState != UIState.DEFAULT) { return; }
-        v2pos = getEngine().getSystem(MousePositionSystem.class).unprojectedMousePos();
+        Vector2 v2pos = getEngine().getSystem(MousePositionSystem.class).unprojectedMousePos();
         //temporary wall creation to test A*
         if (Gdx.input.isTouched() && !Orchestrator.gameIgnoreInput) {
             TiledMapTileLayer collision = (TiledMapTileLayer)tileMap.map.getLayers().get("collision");
@@ -78,7 +74,7 @@ public class DebugSystem extends EntitySystem {
             Entity entity = new Entity();
             entity.add(job);
             entity.add(jobType);
-            Orchestrator.getEngine().addEntity(entity);
+            Orchestrator.engine.addEntity(entity);
         }
         //temporary hauling test
         if (Gdx.input.isKeyJustPressed(Input.Keys.H) && !Orchestrator.gameIgnoreInput) {
@@ -87,12 +83,17 @@ public class DebugSystem extends EntitySystem {
 
         //temporary hauling test
         if (Gdx.input.isKeyJustPressed(Input.Keys.C) && !Orchestrator.gameIgnoreInput) {
-            Orchestrator.getEngine().getSystem(QueueSystem.class).clearQueue();
+            Orchestrator.engine.getSystem(QueueSystem.class).clearQueue();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.J) && !Orchestrator.gameIgnoreInput) {
-            new GetResourceTypeToDestination(testEntity, v2pos, ResourceType.WOOD);
-
+            DeferrableHaulState haul = new DeferrableHaulState(ResourceType.WOOD, v2pos);
+            JobComponent job = new JobComponent("Move Wood", JobComponent.JobStatus.IDLE, haul);
+            JobTypeComponent jobType = new JobTypeComponent(JobType.HAUL);
+            Entity entity = new Entity();
+            entity.add(job);
+            entity.add(jobType);
+            Orchestrator.engine.addEntity(entity);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.E) && !Orchestrator.gameIgnoreInput) {

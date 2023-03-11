@@ -13,6 +13,11 @@ public abstract class DeferrableState extends State {
         super(entity);
     }
 
+    @Override
+    public void enter() {
+        setStateStatus(StateStatus.RUNNING);
+    }
+
     /**
      * Gather the deferred requirements that are needed by the state.
      * This method is invoked within the abstract class when the StateStatus is set to RUNNING
