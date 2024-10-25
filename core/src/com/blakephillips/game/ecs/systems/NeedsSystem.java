@@ -9,6 +9,7 @@ import com.blakephillips.game.ecs.components.HungerComponent;
 public class NeedsSystem extends IntervalIteratingSystem {
 
     private final ComponentMapper<HungerComponent> hungerComponents = ComponentMapper.getFor(HungerComponent.class);
+
     public NeedsSystem() {
         super(Family.one(HungerComponent.class).get(), 1f);
     }

@@ -14,7 +14,7 @@ import com.blakephillips.engine.utilities.shape.Box
 import space.earlygrey.shapedrawer.ShapeDrawer
 import kotlin.math.sign
 
-class ShapeRenderSystem(private val batch: SpriteBatch): SortedIteratingSystem(
+class ShapeRenderSystem(private val batch: SpriteBatch) : SortedIteratingSystem(
     Family.all(ShapeComponent::class.java).get(),
     ZComparator
 ) {
@@ -28,16 +28,17 @@ class ShapeRenderSystem(private val batch: SpriteBatch): SortedIteratingSystem(
     }
 
 
-    private object ZComparator: Comparator<Entity> {
+    private object ZComparator : Comparator<Entity> {
         override fun compare(o1: Entity?, o2: Entity?): Int {
             return sign((shapeComponents[o1].z - shapeComponents[o2].z).toFloat()).toInt()
         }
     }
+
     companion object {
         private val shapeComponents = ComponentMapper.getFor(ShapeComponent::class.java)
         private val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888).also {
             it.setColor(Color.WHITE)
-            it.drawPixel(0,0)
+            it.drawPixel(0, 0)
         }
         private val region = TextureRegion(Texture(pixmap), 0, 0, 1, 1)
     }

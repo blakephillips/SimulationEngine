@@ -5,6 +5,7 @@ import com.blakephillips.engine.utilities.Direction;
 
 public class DirectionComponent implements Component {
     private Direction direction;
+
     public DirectionComponent(Direction direction) {
         setDirection(direction);
     }

@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
-import com.blakephillips.engine.ai.State
 import com.blakephillips.engine.ai.State.StateStatus
 import com.blakephillips.engine.ecs.components.ai.StateComponent
 

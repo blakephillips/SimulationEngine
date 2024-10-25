@@ -56,10 +56,12 @@ public class PathFollowingSystem extends IntervalIteratingSystem {
         Vertex nextPos = path.getPath().remove(0);
         Vector2 v2pos = tileMap.cellIndexToWorld(nextPos);
 
-        for (int i = 0; i < path.getPath().getLength()-1; i++) {
-            if (i > 5) { break; }
+        for (int i = 0; i < path.getPath().getLength() - 1; i++) {
+            if (i > 5) {
+                break;
+            }
             Path<Vertex> vertexPath = path.getPath();
-            if (!tileMap.graph.getGraph().edgeExists(vertexPath.get(i), vertexPath.get(i+1))) {
+            if (!tileMap.graph.getGraph().edgeExists(vertexPath.get(i), vertexPath.get(i + 1))) {
 
                 //when a path is null, but there is a destination,
                 //will attempt to re-path to the destination
@@ -76,8 +78,7 @@ public class PathFollowingSystem extends IntervalIteratingSystem {
                 directionComponent.setDirection(Direction.NORTH);
             } else if (pos.pos.y > v2pos.y) {
                 directionComponent.setDirection(Direction.SOUTH);
-            }
-            else if (pos.pos.x < v2pos.x) {
+            } else if (pos.pos.x < v2pos.x) {
                 directionComponent.setDirection(Direction.EAST);
             } else if (pos.pos.x > v2pos.x) {
                 directionComponent.setDirection(Direction.WEST);

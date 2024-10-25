@@ -81,10 +81,12 @@ class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?
     }
 
     private fun getSelectableEntities() =
-        Orchestrator.engine.getEntitiesFor(Family.all(
-            SelectableComponent::class.java,
-            PositionComponent::class.java
-        ).get())
+        Orchestrator.engine.getEntitiesFor(
+            Family.all(
+                SelectableComponent::class.java,
+                PositionComponent::class.java
+            ).get()
+        )
 
     companion object {
         private var selectableComponents = ComponentMapper.getFor(SelectableComponent::class.java)

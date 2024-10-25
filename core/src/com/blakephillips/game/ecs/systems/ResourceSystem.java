@@ -29,7 +29,9 @@ public class ResourceSystem extends EntitySystem {
     }
 
     public Set<Entity> getAllResourcesOfType(ResourceType resourceType) {
-        if (!resources.containsKey(resourceType)) { return null; }
+        if (!resources.containsKey(resourceType)) {
+            return null;
+        }
         return resources.get(resourceType);
     }
 
@@ -37,8 +39,10 @@ public class ResourceSystem extends EntitySystem {
         Set<Entity> entities = this.getAllResourcesOfType(resourceType);
         Entity closestEntity = null;
         Engine engine = Orchestrator.engine;
-        if (entities == null || entities.isEmpty()) { return null; }
-        for (Entity entity: entities) {
+        if (entities == null || entities.isEmpty()) {
+            return null;
+        }
+        for (Entity entity : entities) {
             if (reservedComponents.has(entity)) {
                 continue;
             }
@@ -77,7 +81,9 @@ public class ResourceSystem extends EntitySystem {
     }
 
     public void addResource(Entity entity) {
-        if (!hasResourceComponent(entity)) { return; }
+        if (!hasResourceComponent(entity)) {
+            return;
+        }
         ResourceComponent resourceComponent = resourceComponents.get(entity);
         if (!resources.containsKey(resourceComponent.getType())) {
             resources.put(resourceComponent.getType(), new HashSet<>());
@@ -87,7 +93,9 @@ public class ResourceSystem extends EntitySystem {
     }
 
     public void removeResource(Entity entity) {
-        if (!hasResourceComponent(entity)) { return; }
+        if (!hasResourceComponent(entity)) {
+            return;
+        }
         ResourceComponent resourceComponent = resourceComponents.get(entity);
         if (!resources.containsKey(resourceComponent.getType())) {
             return;

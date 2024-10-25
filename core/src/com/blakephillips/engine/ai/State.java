@@ -9,6 +9,7 @@ public abstract class State {
     private StateStatus stateStatus = StateStatus.IDLE;
     private State previousState = null;
     private State nextState = null;
+
     public State(Entity entity) {
         this.entity = entity;
     }
@@ -23,11 +24,13 @@ public abstract class State {
     }
 
     public abstract void enter();
+
     public void exit() {
         stateStatus = StateStatus.COMPLETE;
     }
 
     public abstract void update(float deltaTime);
+
     public void reserveEntity(Entity entityToReserve) {
         entityToReserve.add(new ReservedComponent(entity));
     }
@@ -67,11 +70,15 @@ public abstract class State {
     }
 
     public void setStateStatus(StateStatus status) {
-        if (this.stateStatus == StateStatus.FAILED || this.stateStatus == StateStatus.COMPLETE ) { return; }
+        if (this.stateStatus == StateStatus.FAILED || this.stateStatus == StateStatus.COMPLETE) {
+            return;
+        }
         this.stateStatus = status;
     }
 
-    public StateStatus getStateStatus() { return stateStatus; }
+    public StateStatus getStateStatus() {
+        return stateStatus;
+    }
 
     public enum StateStatus {
         IDLE,

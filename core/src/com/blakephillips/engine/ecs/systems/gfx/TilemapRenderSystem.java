@@ -26,19 +26,14 @@ public class TilemapRenderSystem extends EntitySystem {
     }
 
     @Override
-    public void addedToEngine (Engine engine) {
+    public void addedToEngine(Engine engine) {
         Gdx.app.log("SimEngine", "TilemapRenderSystem added to engine.");
     }
 
     @Override
-    public void removedFromEngine (Engine engine) {
+    public void removedFromEngine(Engine engine) {
         Gdx.app.log("SimEngine", "MovementSystem removed from engine.");
     }
-
-
-
-
-
 
 
 }

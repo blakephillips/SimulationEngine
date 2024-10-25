@@ -17,6 +17,7 @@ import com.blakephillips.game.ecs.systems.ResourceSystem;
 public class GetResourceTypeToDestination {
     ResourceSystem resourceSystem;
     ComponentMapper<PositionComponent> positionComponents = ComponentMapper.getFor(PositionComponent.class);
+
     public GetResourceTypeToDestination(Entity actorEntity, Vector2 haulToPos, ResourceType resourceType) {
 
         if (!positionComponents.has(actorEntity)) {

@@ -66,7 +66,7 @@ public class PathFindingState extends State {
         }
     }
 
-    public void setDestination (Vector2 destination) {
+    public void setDestination(Vector2 destination) {
         this.destination = destination;
     }
 }

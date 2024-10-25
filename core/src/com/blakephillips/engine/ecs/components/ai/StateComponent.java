@@ -5,6 +5,7 @@ import com.blakephillips.engine.ai.State;
 
 public class StateComponent implements Component {
     public State state;
+
     public StateComponent(State state) {
         this.state = state;
     }

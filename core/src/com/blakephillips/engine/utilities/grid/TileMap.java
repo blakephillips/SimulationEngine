@@ -40,7 +40,7 @@ public class TileMap {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 Cell cell = new Cell();
-                cell.setTile(new StaticTiledMapTile(spriteSheet.getTextureFromTileMap(10,2)));
+                cell.setTile(new StaticTiledMapTile(spriteSheet.getTextureFromTileMap(10, 2)));
                 layer.setCell(x, y, cell);
             }
         }
@@ -77,7 +77,7 @@ public class TileMap {
     }
 
     public Vector2 cellIndexToWorld(Vertex vertex) {
-        TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get(0);
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
 
         return new Vector2(vertex.x * layer.getTileWidth(), vertex.y * layer.getTileHeight());
     }

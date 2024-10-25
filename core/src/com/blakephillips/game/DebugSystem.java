@@ -32,6 +32,7 @@ public class DebugSystem extends EntitySystem {
     Entity testHaulEntity;
 
     TileMap tileMap;
+
     public DebugSystem(TileMap tileMap, Entity testEntity, Entity testHaulEntity, Entity testOtherEntity) {
         this.tileMap = tileMap;
         //temporary
@@ -43,11 +44,13 @@ public class DebugSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        if (Orchestrator.uiState != UIState.DEFAULT) { return; }
+        if (Orchestrator.uiState != UIState.DEFAULT) {
+            return;
+        }
         Vector2 v2pos = getEngine().getSystem(MousePositionSystem.class).unprojectedMousePos();
         //temporary wall creation to test A*
         if (Gdx.input.isTouched() && !Orchestrator.gameIgnoreInput) {
-            TiledMapTileLayer collision = (TiledMapTileLayer)tileMap.map.getLayers().get("collision");
+            TiledMapTileLayer collision = (TiledMapTileLayer) tileMap.map.getLayers().get("collision");
 
             Vertex vertex = tileMap.worldToCellIndex(v2pos);
             tileMap.graph.graph.disconnect(vertex);
@@ -59,7 +62,7 @@ public class DebugSystem extends EntitySystem {
 
         if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && !Orchestrator.gameIgnoreInput) {
 
-            TiledMapTileLayer collision = (TiledMapTileLayer)tileMap.map.getLayers().get("collision");
+            TiledMapTileLayer collision = (TiledMapTileLayer) tileMap.map.getLayers().get("collision");
             Vertex vertex = tileMap.worldToCellIndex(v2pos);
 
             tileMap.graph.connectNeighbors(vertex);
@@ -108,7 +111,6 @@ public class DebugSystem extends EntitySystem {
         }
 
     }
-
 
 
 }

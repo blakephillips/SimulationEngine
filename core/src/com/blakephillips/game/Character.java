@@ -15,10 +15,11 @@ import com.blakephillips.game.ecs.components.SelectableComponent;
 
 public class Character {
     Entity entity;
+
     public Character(Vector2 pos, Engine engine) {
         entity = new Entity();
         SpriteSheet characterSpriteSheet = new SpriteSheet("capybara.png", 32, 32);
-        TextureRegion spr_west = characterSpriteSheet.getTextureFromTileMap(0,0);
+        TextureRegion spr_west = characterSpriteSheet.getTextureFromTileMap(0, 0);
         TextureRegion spr_east = characterSpriteSheet.getTextureFromTileMap(0, 0, true);
         TextureRegion spr_north = characterSpriteSheet.getTextureFromTileMap(0, 2);
         TextureRegion spr_south = characterSpriteSheet.getTextureFromTileMap(0, 1);

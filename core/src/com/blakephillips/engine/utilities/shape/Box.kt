@@ -8,7 +8,7 @@ import kotlin.math.min
 class Box(
     val p1: Vector2,
     val p2: Vector2
-): Shape() {
+) : Shape() {
     private val rectangle = Rectangle()
     override fun contains(pos: Vector2): Boolean {
         val maxX = max(p1.x, p2.x)

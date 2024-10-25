@@ -16,6 +16,7 @@ public class MousePositionSystem extends IteratingSystem {
     private final Viewport viewport;
     private Vector3 v3pos;
     private Vector2 v2pos;
+
     public MousePositionSystem(Viewport viewport) {
         super(Family.all(MousePositionComponent.class).get());
         this.viewport = viewport;

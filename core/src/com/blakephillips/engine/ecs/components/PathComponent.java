@@ -12,6 +12,7 @@ public class PathComponent implements Component {
     public PathComponent(Path<Vertex> path) {
         this.path = path;
     }
+
     public PathComponent(Vector2 destination) {
         this.destination = destination;
     }

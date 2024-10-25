@@ -35,6 +35,7 @@ public class HaulState extends State {
     ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
     ComponentMapper<PathComponent> pathComponents = ComponentMapper.getFor(PathComponent.class);
     ComponentMapper<ReservedComponent> reservedComponents = ComponentMapper.getFor(ReservedComponent.class);
+
     @Override
     public void enter() {
         Gdx.app.log("Game", "Haul state entered");
@@ -146,15 +147,19 @@ public class HaulState extends State {
 
 
     }
+
     public void setHaulToPosition(Vector2 haulToPosition) {
         this.haulToPosition = haulToPosition;
     }
+
     public Vector2 getHaulToPosition() {
         return haulToPosition;
     }
+
     public void setHaulEntity(Entity haulEntity) {
         this.haulEntity = haulEntity;
     }
+
     public Entity getHaulEntity() {
         return haulEntity;
     }

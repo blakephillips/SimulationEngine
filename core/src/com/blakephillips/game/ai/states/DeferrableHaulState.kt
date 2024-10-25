@@ -9,7 +9,7 @@ import com.blakephillips.game.Orchestrator
 import com.blakephillips.game.data.ResourceType
 import com.blakephillips.game.ecs.systems.ResourceSystem
 
-class DeferrableHaulState(val resourceType: ResourceType, val destination: Vector2): DeferrableState(null) {
+class DeferrableHaulState(val resourceType: ResourceType, val destination: Vector2) : DeferrableState(null) {
 
     override fun update(deltaTime: Float) {
         exit()
@@ -23,7 +23,8 @@ class DeferrableHaulState(val resourceType: ResourceType, val destination: Vecto
         val resource = resourceSystem.getClosestReachableResourceOfType(resourceType, pos)
 
         if (resource == null) {
-            Gdx.app.log(this::class.simpleName,
+            Gdx.app.log(
+                this::class.simpleName,
                 "GetResourceTypeToDestination Cannot find resource of type $resourceType"
             )
             exit(true)

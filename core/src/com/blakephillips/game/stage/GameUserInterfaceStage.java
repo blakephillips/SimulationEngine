@@ -26,21 +26,21 @@ public class GameUserInterfaceStage {
 
 
         button1.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Orchestrator.gameIgnoreInput = true;
                 if (Orchestrator.uiState != UIState.SELECTING) {
                     Orchestrator.uiState = UIState.SELECTING;
                     button1.setText("Stop Cutting");
-                    button1.sizeBy(16*4, 1);
+                    button1.sizeBy(16 * 4, 1);
                 } else {
                     Orchestrator.uiState = UIState.DEFAULT;
                     button1.setText("Cut");
-                    button1.sizeBy(-16*4, 1);
+                    button1.sizeBy(-16 * 4, 1);
                 }
                 return true;
             }
 
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 Orchestrator.gameIgnoreInput = false;
             }
         });

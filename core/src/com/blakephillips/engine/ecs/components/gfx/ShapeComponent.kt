@@ -10,4 +10,4 @@ class ShapeComponent(
     val shapeType: ShapeRenderer.ShapeType = ShapeRenderer.ShapeType.Filled,
     val color: Color = Color.GRAY,
     val z: Int = 0
-): Component
+) : Component

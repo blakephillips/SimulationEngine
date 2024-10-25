@@ -49,6 +49,7 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         implementation 'space.earlygrey:simple-graphs:v5.0.0'
         implementation 'space.earlygrey:shapedrawer:v2.6.0'
+        implementation 'io.arrow-kt:arrow-core:1.2.4'
     }
 }
 
@@ -68,6 +69,7 @@ project(":html") {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
         implementation 'space.earlygrey:simple-graphs:v5.0.0'
         implementation 'space.earlygrey:shapedrawer:v2.6.0'
+        implementation 'io.arrow-kt:arrow-core:1.2.4'
     }
 }
 
@@ -81,5 +83,6 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         implementation 'space.earlygrey:simple-graphs:v5.0.0'
         implementation 'space.earlygrey:shapedrawer:v2.6.0'
+        implementation 'io.arrow-kt:arrow-core:1.2.4'
     }
 }

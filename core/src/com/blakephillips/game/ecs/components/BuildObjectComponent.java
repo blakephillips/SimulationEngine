@@ -12,6 +12,7 @@ public class BuildObjectComponent implements Component {
     private Map<ResourceType, Integer> typeMap = new HashMap<>();
     //object to instantiate when the building is complete
     private final Entity objectEntity;
+
     public BuildObjectComponent(Map<ResourceType, Integer> typeMap, Entity objectEntity) {
         this.typeMap = typeMap;
         this.objectEntity = objectEntity;

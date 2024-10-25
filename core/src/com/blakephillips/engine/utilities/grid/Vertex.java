@@ -14,8 +14,12 @@ public class Vertex {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) { return true; }
-        if (!(obj instanceof Vertex)) { return false; }
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Vertex)) {
+            return false;
+        }
 
         Vertex v = (Vertex) obj;
 

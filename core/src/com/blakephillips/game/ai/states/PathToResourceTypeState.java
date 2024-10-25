@@ -46,5 +46,6 @@ public class PathToResourceTypeState extends State {
     }
 
     @Override
-    public void update(float deltaTime) {}
+    public void update(float deltaTime) {
+    }
 }

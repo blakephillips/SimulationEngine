@@ -1,7 +1,6 @@
 package com.blakephillips.game.ecs.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
 import com.blakephillips.game.data.ResourceType;
 
 public class ResourceComponent implements Component {

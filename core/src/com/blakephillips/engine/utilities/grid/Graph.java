@@ -40,15 +40,15 @@ public class Graph {
         Array<Vertex> directions = new Array<>(4);
 
         //connection directions
-        directions.add(new Vertex(x, y+1));
-        directions.add(new Vertex(x, y-1));
-        directions.add(new Vertex(x+1, y));
-        directions.add(new Vertex(x-1, y));
+        directions.add(new Vertex(x, y + 1));
+        directions.add(new Vertex(x, y - 1));
+        directions.add(new Vertex(x + 1, y));
+        directions.add(new Vertex(x - 1, y));
 
-        for (Vertex neighbor: directions) {
+        for (Vertex neighbor : directions) {
 
             if (graph.contains(neighbor) && !graph.edgeExists(vertex, neighbor)
-                && !tilemap.obstacle(neighbor)) {
+                    && !tilemap.obstacle(neighbor)) {
                 graph.addEdge(vertex, neighbor);
             }
         }

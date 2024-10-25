@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Entity;
  */
 public abstract class DeferrableState extends State {
     boolean gatheredRequirements = false;
+
     public DeferrableState(Entity entity) {
         super(entity);
     }
@@ -26,6 +27,7 @@ public abstract class DeferrableState extends State {
 
     /**
      * Setter that enacts gatherRequirements the first time a state is set to running
+     *
      * @param status - The state to assign to the status
      */
     @Override

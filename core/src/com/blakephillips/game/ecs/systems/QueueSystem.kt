@@ -88,10 +88,13 @@ class QueueSystem : EntitySystem() {
         Gdx.app.debug("QueueSystem", String.format("Added job: '%s' to queue", jobComponent.name))
     }
 
-    private fun getJobTypeQueue(queueMap: HashMap<JobType, PriorityQueue<Pair<Int, Entity>>>, jobType: JobType): PriorityQueue<Pair<Int, Entity>> =
-         queueMap[jobType] ?: PriorityQueue(Comparator.comparing { obj: Pair<Int, Entity> -> obj.key }).also {
+    private fun getJobTypeQueue(
+        queueMap: HashMap<JobType, PriorityQueue<Pair<Int, Entity>>>,
+        jobType: JobType
+    ): PriorityQueue<Pair<Int, Entity>> =
+        queueMap[jobType] ?: PriorityQueue(Comparator.comparing { obj: Pair<Int, Entity> -> obj.key }).also {
             queueMap[jobType] = it
-     }
+        }
 
     fun clearQueue() {
         for (jobQueuePair in queueMap) {

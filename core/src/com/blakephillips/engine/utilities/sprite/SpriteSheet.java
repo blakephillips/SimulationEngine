@@ -42,10 +42,9 @@ public class SpriteSheet {
             return splitSpriteSheet[0][0];
         }
 
-        if (flipped)
-        {
+        if (flipped) {
             if (flippedSprites.containsKey(getStringKey(col, row))) {
-                return flippedSprites.get(getStringKey(col,row));
+                return flippedSprites.get(getStringKey(col, row));
             }
 
             TextureRegion region = spriteSheet.split(spriteWidth, spriteHeight)[col][row];

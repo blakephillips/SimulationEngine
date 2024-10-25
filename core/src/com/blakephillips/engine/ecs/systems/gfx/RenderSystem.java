@@ -32,7 +32,7 @@ public class RenderSystem extends SortedIteratingSystem {
         @Override
         public int compare(Entity entityA, Entity entityB) {
             ComponentMapper<TextureComponent> texComponents = ComponentMapper.getFor(TextureComponent.class);
-            return (int)Math.signum(texComponents.get(entityA).z - texComponents.get(entityB).z);
+            return (int) Math.signum(texComponents.get(entityA).z - texComponents.get(entityB).z);
         }
     }
 }
