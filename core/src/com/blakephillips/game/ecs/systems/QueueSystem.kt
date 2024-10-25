@@ -7,12 +7,14 @@ import com.blakephillips.engine.ecs.components.ai.CurrentJobComponent
 import com.blakephillips.engine.ecs.components.ai.JobComponent
 import com.blakephillips.engine.utilities.datatype.Pair
 import com.blakephillips.game.Orchestrator
+import com.blakephillips.game.data.JobStatus
+import com.blakephillips.game.data.JobStatusUtility
 import com.blakephillips.game.data.JobType
 import com.blakephillips.game.ecs.components.JobTypeComponent
 import java.util.*
 
 class QueueSystem : EntitySystem() {
-    private val queue = HashMap<JobType, PriorityQueue<Pair<Int, Entity>>>()
+    private val queueMap = HashMap<JobType, PriorityQueue<Pair<Int, Entity>>>()
     private val currentJobComponents = ComponentMapper.getFor(
         CurrentJobComponent::class.java
     )
@@ -20,7 +22,7 @@ class QueueSystem : EntitySystem() {
     private val jobTypeComponents = ComponentMapper.getFor(
         JobTypeComponent::class.java
     )
-    private var entities: ImmutableArray<Entity>? = null
+    private lateinit var entities: ImmutableArray<Entity>
 
     init {
         Orchestrator.engine.addEntityListener(Family.all(JobComponent::class.java).get(), QueueListener())
@@ -31,16 +33,16 @@ class QueueSystem : EntitySystem() {
     }
 
     override fun update(deltaTime: Float) {
-        for (i in 0 until entities!!.size()) {
-            val assignableEntity = entities!![i]
+        for (assignableEntity in entities) {
             val currentJobComponent = currentJobComponents[assignableEntity]
             // if the current job is running / in any non-finished state, skip
-            when (currentJobComponent.currentJob?.status) {
-                JobComponent.JobStatus.RUNNING, JobComponent.JobStatus.START_PENDING -> continue
-                else -> {}
-            }
+
+            val status = currentJobComponent.currentJob?.status
+
+            if (status !== null && JobStatusUtility.isInProgress(status)) continue
+
             currentJobComponent.currentJob = null
-            for ((jobType, jobQueue) in queue) {
+            for ((_, jobQueue) in queueMap) {
                 if (jobQueue.isEmpty()) {
                     continue
                 }
@@ -50,7 +52,7 @@ class QueueSystem : EntitySystem() {
                 val queuedJobComponent = jobComponents[queuedJobEntity]
 
                 // take it from idle state to awaiting start
-                queuedJobComponent.status = JobComponent.JobStatus.START_PENDING
+                queuedJobComponent.status = JobStatus.START_PENDING
 
                 // set the current job to the new one
                 currentJobComponent.currentJob = queuedJobComponent
@@ -60,53 +62,51 @@ class QueueSystem : EntitySystem() {
     }
 
     fun addJob(entity: Entity) {
-        when {
-            !hasJobTypeComponent(entity) -> {
-                Gdx.app.error("QueueSystem", "Job was added without JobType, removing from Engine")
-                engine.removeEntity(entity)
-                return
-            }
-
-            else -> {}
+        if (!hasJobTypeComponent(entity)) {
+            Gdx.app.error("QueueSystem", "Job was added without JobType, removing from Engine")
+            engine.removeEntity(entity)
+            return
         }
 
         val jobComponent = jobComponents[entity]
-        if (jobComponent.status != JobComponent.JobStatus.IDLE) {
+        if (jobComponent.status != JobStatus.IDLE) {
             Gdx.app.debug(
                 "QueueSystem", String.format(
                     "Job %s was added to engine not in idle state, " +
-                            "skipping adding to queue.", jobComponent.name
+                            "skipping adding to queue and deleting", jobComponent.name
                 )
             )
+            engine.removeEntity(entity)
             return
         }
         val jobTypeComponent = jobTypeComponents[entity]
-        if (!queue.containsKey(jobTypeComponent.type)) {
-            queue[jobTypeComponent.type] = PriorityQueue(Comparator.comparing { obj: Pair<Int, Entity> -> obj.key })
-        }
+        val jobTypeQueue = getJobTypeQueue(queueMap, jobTypeComponent.type)
 
         //TODO: Priority
-        jobComponent.status = JobComponent.JobStatus.IDLE
-        queue[jobTypeComponent.type]?.add(Pair(5, entity))
+        jobComponent.status = JobStatus.IDLE
+        jobTypeQueue.add(Pair(5, entity))
         Gdx.app.debug("QueueSystem", String.format("Added job: '%s' to queue", jobComponent.name))
     }
 
+    private fun getJobTypeQueue(queueMap: HashMap<JobType, PriorityQueue<Pair<Int, Entity>>>, jobType: JobType): PriorityQueue<Pair<Int, Entity>> =
+         queueMap[jobType] ?: PriorityQueue(Comparator.comparing { obj: Pair<Int, Entity> -> obj.key }).also {
+            queueMap[jobType] = it
+     }
+
     fun clearQueue() {
-        for (jobQueuePair in queue) {
+        for (jobQueuePair in queueMap) {
             jobQueuePair.value.clear()
         }
         Gdx.app.debug("QueueSystem", "Cleared Queue")
     }
 
     private fun hasJobTypeComponent(entity: Entity): Boolean {
-        return when {
-            !jobTypeComponents.has(entity) -> {
-                Gdx.app.error("QueueSystem", "Job doesn't have JobTypeComponent")
-                false
-            }
-
-            else -> true
+        if (jobComponents.has(entity)) {
+            return true
         }
+
+        Gdx.app.error("QueueSystem", "Entity $entity have JobTypeComponent")
+        return false
     }
 }
 

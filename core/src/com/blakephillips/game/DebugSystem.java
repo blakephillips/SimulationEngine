@@ -18,6 +18,7 @@ import com.blakephillips.engine.utilities.sprite.SpriteSheet;
 import com.blakephillips.game.ai.states.DeferrableHaulState;
 import com.blakephillips.game.ai.states.HaulState;
 import com.blakephillips.game.ai.states.PathFindingState;
+import com.blakephillips.game.data.JobStatus;
 import com.blakephillips.game.data.JobType;
 import com.blakephillips.game.data.ResourceType;
 import com.blakephillips.game.data.UIState;
@@ -69,7 +70,7 @@ public class DebugSystem extends EntitySystem {
             Vertex destination = tileMap.worldToCellIndex(v2pos);
 
             PathFindingState walk = new PathFindingState(null, new Vector2(v2pos.x, v2pos.y));
-            JobComponent job = new JobComponent("Walk", JobComponent.JobStatus.IDLE, walk);
+            JobComponent job = new JobComponent("Walk", JobStatus.IDLE, walk);
             JobTypeComponent jobType = new JobTypeComponent(JobType.HAUL);
             Entity entity = new Entity();
             entity.add(job);
@@ -88,7 +89,7 @@ public class DebugSystem extends EntitySystem {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.J) && !Orchestrator.gameIgnoreInput) {
             DeferrableHaulState haul = new DeferrableHaulState(ResourceType.WOOD, v2pos);
-            JobComponent job = new JobComponent("Move Wood", JobComponent.JobStatus.IDLE, haul);
+            JobComponent job = new JobComponent("Move Wood", JobStatus.IDLE, haul);
             JobTypeComponent jobType = new JobTypeComponent(JobType.HAUL);
             Entity entity = new Entity();
             entity.add(job);
@@ -98,7 +99,7 @@ public class DebugSystem extends EntitySystem {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.E) && !Orchestrator.gameIgnoreInput) {
             PathFindingState walk = new PathFindingState(null, new Vector2(v2pos.x, v2pos.y));
-            JobComponent jobComponent = new JobComponent("Walk", JobComponent.JobStatus.IDLE, walk);
+            JobComponent jobComponent = new JobComponent("Walk", JobStatus.IDLE, walk);
             JobTypeComponent jobTypeComponent = new JobTypeComponent(JobType.HAUL);
             Entity entity = new Entity();
             entity.add(jobComponent);

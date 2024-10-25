@@ -1,6 +1,6 @@
-package com.blakephillips.game.data;
+package com.blakephillips.game.data
 
-public enum JobType {
+enum class JobType {
     HAUL,
     CUT
 }

@@ -29,6 +29,7 @@ import com.blakephillips.engine.utilities.sprite.SpriteSheet;
 import com.blakephillips.game.ai.states.HaulState;
 import com.blakephillips.game.ai.states.PathFindingState;
 import com.blakephillips.game.ai.states.PathToResourceTypeState;
+import com.blakephillips.game.data.JobStatus;
 import com.blakephillips.game.data.JobType;
 import com.blakephillips.game.data.ResourceType;
 import com.blakephillips.game.ecs.components.JobTypeComponent;
@@ -108,7 +109,7 @@ public class Game extends ApplicationAdapter {
 		pathState.setNextState(pathState2);
 		pathState2.setNextState(haulState2);
 
-		JobComponent jobComponent = new JobComponent("Haul to place", JobComponent.JobStatus.IDLE, haulState);
+		JobComponent jobComponent = new JobComponent("Haul to place", JobStatus.IDLE, haulState);
 		Entity jobEntity = new Entity();
 		jobEntity.add(jobComponent);
 		jobEntity.add(new JobTypeComponent(JobType.HAUL));
@@ -117,7 +118,7 @@ public class Game extends ApplicationAdapter {
 		// adding two things to the queue
 
 		PathFindingState pathState1 = new PathFindingState(null, new Vector2(450, 450));
-		JobComponent jobComponent2 = new JobComponent("Walk somewhere or something", JobComponent.JobStatus.IDLE, pathState1);
+		JobComponent jobComponent2 = new JobComponent("Walk somewhere or something", JobStatus.IDLE, pathState1);
 		Entity jobEntity2 = new Entity();
 		jobEntity2.add(jobComponent2);
 		jobEntity2.add(new JobTypeComponent(JobType.HAUL));
@@ -125,7 +126,7 @@ public class Game extends ApplicationAdapter {
 
 		Entity jobEntity1 = new Entity();
 		PathToResourceTypeState toResourceTypeState = new PathToResourceTypeState(null, ResourceType.WOOD);
-		JobComponent jobComponent1 = new JobComponent("Haul other thing to place", JobComponent.JobStatus.IDLE, toResourceTypeState);
+		JobComponent jobComponent1 = new JobComponent("Haul other thing to place", JobStatus.IDLE, toResourceTypeState);
 		jobEntity1.add(new JobTypeComponent(JobType.HAUL));
 		jobEntity1.add(jobComponent1);
 		engine.addEntity(jobEntity1);

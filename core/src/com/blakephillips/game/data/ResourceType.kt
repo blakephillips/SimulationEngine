@@ -1,5 +1,5 @@
-package com.blakephillips.game.data;
+package com.blakephillips.game.data
 
-public enum ResourceType {
-    WOOD,
+enum class ResourceType {
+    WOOD
 }

@@ -3,6 +3,7 @@ package com.blakephillips.engine.ecs.components.ai;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.blakephillips.engine.ai.State;
+import com.blakephillips.game.data.JobStatus;
 
 public class JobComponent implements Component {
     private String name;
@@ -46,14 +47,4 @@ public class JobComponent implements Component {
     public Entity getStateEntity() {
         return stateEntity;
     }
-
-    public enum JobStatus {
-        IDLE,
-        START_PENDING,
-        RUNNING,
-        FINISHED,
-        INCOMPLETE,
-        CANCELLED
-    }
-
 }

@@ -9,6 +9,7 @@ import com.blakephillips.engine.ai.State
 import com.blakephillips.engine.ai.State.StateStatus
 import com.blakephillips.engine.ecs.components.ai.JobComponent
 import com.blakephillips.engine.ecs.components.ai.StateComponent
+import com.blakephillips.game.data.JobStatus
 
 class JobSystem : IteratingSystem(Family.all(JobComponent::class.java).get()) {
     private var jobComponents = ComponentMapper.getFor(JobComponent::class.java)
@@ -16,17 +17,17 @@ class JobSystem : IteratingSystem(Family.all(JobComponent::class.java).get()) {
         val job = jobComponents[entity]
 
         when (job.status) {
-            JobComponent.JobStatus.START_PENDING -> {
+            JobStatus.START_PENDING -> {
                 job.stateEntity.add(StateComponent(job.currentState))
                 engine.addEntity(job.stateEntity)
-                job.status = JobComponent.JobStatus.RUNNING
+                job.status = JobStatus.RUNNING
             }
-            JobComponent.JobStatus.RUNNING -> {
+            JobStatus.RUNNING -> {
                 when (job.currentState.stateStatus) {
                     StateStatus.COMPLETE -> {
                         if (job.currentState.nextState == null) {
                             job.stateEntity.remove(StateComponent::class.java)
-                            job.status = JobComponent.JobStatus.FINISHED
+                            job.status = JobStatus.FINISHED
                         }
                         if (job.currentState.nextState != null) {
                             job.stateEntity.add(StateComponent(job.currentState.nextState))
@@ -36,17 +37,17 @@ class JobSystem : IteratingSystem(Family.all(JobComponent::class.java).get()) {
                     StateStatus.FAILED -> {
                         Gdx.app.debug("JobSystem", "Job '${job.name}' failed")
                         job.stateEntity.remove(StateComponent::class.java)
-                        job.status = JobComponent.JobStatus.INCOMPLETE
+                        job.status = JobStatus.INCOMPLETE
                     }
                     else -> {}
                 }
             }
-            JobComponent.JobStatus.FINISHED, JobComponent.JobStatus.CANCELLED, JobComponent.JobStatus.INCOMPLETE -> {
+            JobStatus.FINISHED, JobStatus.CANCELLED, JobStatus.INCOMPLETE -> {
                 engine.removeEntity(job.stateEntity)
                 engine.removeEntity(entity)
                 Gdx.app.log("Game", "Finished job ${job.name}")
             }
-            JobComponent.JobStatus.IDLE, null -> {}
+            JobStatus.IDLE, null -> {}
         }
     }
 }
