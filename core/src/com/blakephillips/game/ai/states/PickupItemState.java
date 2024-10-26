@@ -37,6 +37,12 @@ public class PickupItemState extends State {
         PositionComponent actorPos = positionComponents.get(entity);
         PositionComponent itemPos = positionComponents.get(item);
 
+        if (isAlreadyReserved(entity)) {
+            Gdx.app.error("SimEngine", "PickupItemState item is already reserved.");
+            this.exit(true);
+            return;
+        }
+
         if (Pathfinding.chebyshevDistance(actorPos.pos, itemPos.pos) > 15) {
             Gdx.app.error("SimEngine", "PickupItemState item is too far away from actor to pickup");
             this.exit(true);

@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Entity;
  */
 public abstract class DeferrableState extends State {
     boolean gatheredRequirements = false;
+    State stateForAfterDeferred = null;
 
     public DeferrableState(Entity entity) {
         super(entity);
@@ -17,6 +18,10 @@ public abstract class DeferrableState extends State {
     @Override
     public void enter() {
         setStateStatus(StateStatus.RUNNING);
+    }
+
+    public void setStateForAfterDeferred(State state) {
+        stateForAfterDeferred = state;
     }
 
     /**
@@ -36,6 +41,9 @@ public abstract class DeferrableState extends State {
         if (status == StateStatus.RUNNING && !gatheredRequirements) {
             gatherRequirements();
             gatheredRequirements = true;
+            if (stateForAfterDeferred != null) {
+                addToEnd(stateForAfterDeferred);
+            }
         }
         super.setStateStatus(status);
     }

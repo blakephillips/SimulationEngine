@@ -76,6 +76,18 @@ public abstract class State {
         this.stateStatus = status;
     }
 
+    public void addToEnd(State state) {
+        if (nextState == null) {
+            nextState = state;
+            return;
+        }
+        State currentState = this;
+        while (currentState.nextState != null) {
+            currentState = currentState.nextState;
+        }
+        currentState.nextState = state;
+    }
+
     public StateStatus getStateStatus() {
         return stateStatus;
     }

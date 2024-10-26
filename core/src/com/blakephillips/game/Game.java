@@ -37,6 +37,7 @@ import com.blakephillips.game.ecs.components.ResourceComponent;
 import com.blakephillips.game.ecs.systems.InputSystem;
 import com.blakephillips.game.ecs.systems.QueueSystem;
 import com.blakephillips.game.ecs.systems.ResourceSystem;
+import com.blakephillips.game.entity.Axe;
 import com.blakephillips.game.entity.Tree;
 import com.blakephillips.game.stage.GameUserInterfaceStage;
 import com.blakephillips.game.ui.TileSelector;
@@ -90,6 +91,8 @@ public class Game extends ApplicationAdapter {
         engine.addEntity(fps);
 
         // don't look below, this is gross random testing
+
+        new Axe(new Vector2(50, 50));
 
         //testing hauling
         Entity c = new Character(new Vector2(50, 50), engine).entity;
@@ -149,6 +152,9 @@ public class Game extends ApplicationAdapter {
         //tree
         new Tree(new Vector2(16 * 8, 16 * 8));
         new Tree(new Vector2(23 * 3, 23 * 3));
+        new Tree(new Vector2(400, 400));
+        new Axe(new Vector2(300, 300));
+
 
         engine.addSystem(new DebugSystem(tilemap, character.entity, haulObject, c));
 

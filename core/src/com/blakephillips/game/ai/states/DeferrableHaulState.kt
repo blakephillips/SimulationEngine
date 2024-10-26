@@ -31,7 +31,8 @@ class DeferrableHaulState(val resourceType: ResourceType, val destination: Vecto
             return
         }
 
-        nextState = HaulState(entity, resource, destination)
+        val haulState = HaulState(entity, resource, destination)
+        nextState = haulState
     }
 
     companion object {

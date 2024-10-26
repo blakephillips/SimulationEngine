@@ -34,7 +34,6 @@ public class HaulState extends State {
 
     ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
     ComponentMapper<PathComponent> pathComponents = ComponentMapper.getFor(PathComponent.class);
-    ComponentMapper<ReservedComponent> reservedComponents = ComponentMapper.getFor(ReservedComponent.class);
 
     @Override
     public void enter() {

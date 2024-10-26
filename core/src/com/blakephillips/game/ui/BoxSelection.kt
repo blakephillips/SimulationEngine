@@ -7,12 +7,18 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
+import com.blakephillips.engine.ecs.components.ai.JobComponent
 import com.blakephillips.engine.ecs.components.gfx.ShapeComponent
 import com.blakephillips.engine.ecs.components.gfx.TextureComponent
 import com.blakephillips.engine.ecs.components.position.PositionComponent
 import com.blakephillips.engine.utilities.shape.Box
 import com.blakephillips.game.Orchestrator
+import com.blakephillips.game.ai.states.DeferrableHarvestState
+import com.blakephillips.game.data.JobStatus
+import com.blakephillips.game.data.JobType
 import com.blakephillips.game.data.ObjectType
+import com.blakephillips.game.ecs.components.HarvestableComponent
+import com.blakephillips.game.ecs.components.JobTypeComponent
 import com.blakephillips.game.ecs.components.SelectableComponent
 
 class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?) {
@@ -42,9 +48,21 @@ class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?
                 val selectedEntity = Entity().also {
                     it.add(TextureComponent(selectedTileRegion, 1))
                     it.add(posComponent)
+                    selectableComponent.selectionEntity = it
                 }
                 selectedEntities[entity] = selectedEntity
                 Orchestrator.engine.addEntity(selectedEntity)
+
+                val harvestable = harvestableComponents[entity]
+                if (harvestable != null && !harvestable.harvestQueued) {
+                    val harvestJobEntity = Entity().also {
+                        val harvestState = DeferrableHarvestState(entity)
+                        it.add(JobComponent("Harvest Tree", JobStatus.IDLE, harvestState))
+                        it.add(JobTypeComponent(JobType.CUT))
+                    }
+                    harvestable.harvestQueued = true
+                    Orchestrator.engine.addEntity(harvestJobEntity)
+                }
             }
         }
     }
@@ -91,6 +109,7 @@ class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?
     companion object {
         private var selectableComponents = ComponentMapper.getFor(SelectableComponent::class.java)
         private var positionComponents = ComponentMapper.getFor(PositionComponent::class.java)
+        private var harvestableComponents = ComponentMapper.getFor(HarvestableComponent::class.java)
     }
 
 }

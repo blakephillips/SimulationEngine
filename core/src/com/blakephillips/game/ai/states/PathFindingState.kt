@@ -1,72 +1,60 @@
-package com.blakephillips.game.ai.states;
+package com.blakephillips.game.ai.states
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.blakephillips.engine.ai.State;
-import com.blakephillips.engine.ecs.components.PathComponent;
-import com.blakephillips.engine.ecs.components.position.PositionComponent;
-import com.blakephillips.engine.ecs.systems.PathFollowingSystem;
-import com.blakephillips.engine.utilities.grid.Pathfinding;
-import com.blakephillips.engine.utilities.grid.TileMap;
-import com.blakephillips.engine.utilities.grid.Vertex;
-import com.blakephillips.game.Orchestrator;
-import space.earlygrey.simplegraphs.Path;
+import com.badlogic.ashley.core.ComponentMapper
+import com.badlogic.ashley.core.Entity
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Vector2
+import com.blakephillips.engine.ai.State
+import com.blakephillips.engine.ecs.components.PathComponent
+import com.blakephillips.engine.ecs.components.position.PositionComponent
+import com.blakephillips.engine.ecs.systems.PathFollowingSystem
+import com.blakephillips.engine.utilities.grid.Pathfinding
+import com.blakephillips.game.Orchestrator
 
-
-public class PathFindingState extends State {
-
-    private Vector2 destination;
-    private PositionComponent positionComponent;
-    private PathComponent pathComponent;
-    private final int proximity = 15;
-    private final ComponentMapper<PositionComponent> posComponents = ComponentMapper.getFor(PositionComponent.class);
-    private final ComponentMapper<PathComponent> pathComponents = ComponentMapper.getFor(PathComponent.class);
-
-    public PathFindingState(Entity actor, Vector2 destination) {
-        super(actor);
-        this.destination = destination;
-    }
-
-    @Override
-    public void enter() {
-        Gdx.app.log("Game", "Path finding state entered");
-
+class PathFindingState(actor: Entity?, private var destination: Vector2) : State(actor) {
+    override fun enter() {
+        Gdx.app.log("Game", "Path finding state entered")
         if (!posComponents.has(entity)) {
-            Gdx.app.error("Game", "Attempted pathing entity has no position component.");
-            exit(true);
-            return;
+            Gdx.app.error("Game", "Attempted pathing entity has no position component.")
+            exit(true)
+            return
         }
-        positionComponent = posComponents.get(entity);
-
-        Engine engine = Orchestrator.engine;
-        TileMap tileMap = engine.getSystem(PathFollowingSystem.class).getTileMap();
-        Path<Vertex> vertexPath = Pathfinding.getPath(positionComponent.pos, destination, tileMap);
-        pathComponent = new PathComponent(vertexPath);
-        entity.add(pathComponent);
-        setStateStatus(StateStatus.RUNNING);
+        val positionComponent = posComponents[entity]
+        val tileMap = Orchestrator.engine.getSystem(PathFollowingSystem::class.java).tileMap
+        val vertexPath = Pathfinding.getPath(positionComponent.pos, destination, tileMap)
+        val pathComponent = PathComponent(vertexPath)
+        entity.add(pathComponent)
+        setStateStatus(StateStatus.RUNNING)
     }
 
-    @Override
-    public void exit() {
-        setStateStatus(StateStatus.COMPLETE);
-        Gdx.app.log("Game", "Exited path finding state");
+    override fun exit() {
+        setStateStatus(StateStatus.COMPLETE)
+        Gdx.app.log("Game", "Exited path finding state")
     }
 
-    @Override
-    public void update(float deltaTime) {
-        if (getStateStatus() == StateStatus.RUNNING && !pathComponents.has(entity)) {
-            if (Pathfinding.chebyshevDistance(positionComponent.pos, destination) > proximity) {
-                exit(true);
-                return;
+    override fun update(deltaTime: Float) {
+        val positionComponent = posComponents[entity]
+        if (stateStatus == StateStatus.RUNNING && !pathComponents.has(entity)) {
+            if (Pathfinding.chebyshevDistance(positionComponent!!.pos, destination) > PROXIMITY) {
+                exit(true)
+                return
             }
-            exit();
+            exit()
         }
     }
 
-    public void setDestination(Vector2 destination) {
-        this.destination = destination;
+    fun setDestination(destination: Vector2) {
+        this.destination = destination
+    }
+
+    private companion object {
+        const val PROXIMITY = 15
+
+        val posComponents: ComponentMapper<PositionComponent> = ComponentMapper.getFor(
+            PositionComponent::class.java
+        )
+        val pathComponents: ComponentMapper<PathComponent> = ComponentMapper.getFor(
+            PathComponent::class.java
+        )
     }
 }
