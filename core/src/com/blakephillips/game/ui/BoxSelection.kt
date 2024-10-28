@@ -19,6 +19,7 @@ import com.blakephillips.game.data.JobType
 import com.blakephillips.game.data.ObjectType
 import com.blakephillips.game.ecs.components.HarvestableComponent
 import com.blakephillips.game.ecs.components.JobTypeComponent
+import com.blakephillips.game.ecs.components.ObjectTypeComponent
 import com.blakephillips.game.ecs.components.SelectableComponent
 
 class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?) {
@@ -45,6 +46,12 @@ class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?
             val posComponent = positionComponents.get(entity)
             selectableComponent.selected = box.contains(posComponent.pos)
             if (selectableComponent.selected && !selectedEntities.containsKey(entity)) {
+
+                // If selection type is provided, skip any objects that don't match the selectionType
+                if (selectionType != null) {
+                    if (!objectTypeComponents.has(entity) || objectTypeComponents.get(entity).objectType !== selectionType) continue
+                }
+
                 val selectedEntity = Entity().also {
                     it.add(TextureComponent(selectedTileRegion, 1))
                     it.add(posComponent)
@@ -107,9 +114,10 @@ class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?
         )
 
     companion object {
-        private var selectableComponents = ComponentMapper.getFor(SelectableComponent::class.java)
-        private var positionComponents = ComponentMapper.getFor(PositionComponent::class.java)
-        private var harvestableComponents = ComponentMapper.getFor(HarvestableComponent::class.java)
+        private val selectableComponents = ComponentMapper.getFor(SelectableComponent::class.java)
+        private val positionComponents = ComponentMapper.getFor(PositionComponent::class.java)
+        private val harvestableComponents = ComponentMapper.getFor(HarvestableComponent::class.java)
+        private val objectTypeComponents = ComponentMapper.getFor(ObjectTypeComponent::class.java)
     }
 
 }

@@ -11,8 +11,8 @@ import com.blakephillips.game.data.UIState
 import com.blakephillips.game.ui.BoxSelection
 
 class InputSystem : EntitySystem() {
-    var boxSelector = BoxSelection(Vector2(0f, 0f), ObjectType.TREE)
-    val mouseSystem = Orchestrator.engine.getSystem(MousePositionSystem::class.java)
+    private var boxSelector = BoxSelection(Vector2(0f, 0f), ObjectType.CHARACTER)
+    private val mouseSystem = Orchestrator.engine.getSystem(MousePositionSystem::class.java)
     override fun update(deltaTime: Float) {
 
         if (Orchestrator.uiState == UIState.SELECTING) {
@@ -29,6 +29,5 @@ class InputSystem : EntitySystem() {
             }
 
         }
-
     }
 }

@@ -6,12 +6,9 @@ import com.blakephillips.engine.ecs.components.gfx.TextureComponent
 import com.blakephillips.engine.ecs.components.position.PositionComponent
 import com.blakephillips.engine.utilities.sprite.SpriteSheet
 import com.blakephillips.game.Orchestrator
-import com.blakephillips.game.data.JobType
+import com.blakephillips.game.data.ObjectType
 import com.blakephillips.game.data.ResourceType
-import com.blakephillips.game.ecs.components.DropItemComponent
-import com.blakephillips.game.ecs.components.HarvestableComponent
-import com.blakephillips.game.ecs.components.ResourceComponent
-import com.blakephillips.game.ecs.components.SelectableComponent
+import com.blakephillips.game.ecs.components.*
 
 
 class Tree(initialPos: Vector2?) {
@@ -30,6 +27,7 @@ class Tree(initialPos: Vector2?) {
         it.add(TextureComponent(spr.getTextureFromTileMap(1, 4), 0))
         it.add(SelectableComponent())
         it.add(HarvestableComponent(false))
+        it.add(ObjectTypeComponent(ObjectType.TREE))
         it.add(DropItemComponent(log))
         Orchestrator.engine.addEntity(it)
     }
