@@ -51,7 +51,7 @@ class JobSystem : IteratingSystem(Family.all(JobComponent::class.java).get()) {
                 Gdx.app.log("Game", "Finished job ${job.name}")
             }
 
-            JobStatus.IDLE, null -> {}
+            JobStatus.IDLE -> {}
         }
     }
 }

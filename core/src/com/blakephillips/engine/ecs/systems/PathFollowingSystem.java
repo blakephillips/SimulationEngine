@@ -39,33 +39,33 @@ public class PathFollowingSystem extends IntervalIteratingSystem {
         }
 
         //If a path was added with just a destination but no path (wooo convenience)
-        if (path.getPath() == null) {
-            path.setPath(Pathfinding.getPath(pos.pos, path.getDestination(), tileMap));
+        if (path.path == null) {
+            path.path = Pathfinding.getPath(pos.pos, path.destination, tileMap);
         }
 
         //If just a path was added, grab last point for destination
-        if (path.getDestination() == null && !path.getPath().isEmpty()) {
-            path.setDestination(tileMap.cellIndexToWorld(path.getPath().getLast()));
+        if (path.destination == null && !path.path.isEmpty()) {
+            path.destination = tileMap.cellIndexToWorld(path.path.getLast());
         }
 
-        if (path.getPath().isEmpty()) {
+        if (path.path.isEmpty()) {
             entity.remove(PathComponent.class);
             return;
         }
         //for now tile by tile movement, can do this with velocity and not do a intervalSystem
-        Vertex nextPos = path.getPath().remove(0);
+        Vertex nextPos = path.path.remove(0);
         Vector2 v2pos = tileMap.cellIndexToWorld(nextPos);
 
-        for (int i = 0; i < path.getPath().getLength() - 1; i++) {
+        for (int i = 0; i < path.path.getLength() - 1; i++) {
             if (i > 5) {
                 break;
             }
-            Path<Vertex> vertexPath = path.getPath();
+            Path<Vertex> vertexPath = path.path;
             if (!tileMap.graph.getGraph().edgeExists(vertexPath.get(i), vertexPath.get(i + 1))) {
 
                 //when a path is null, but there is a destination,
                 //will attempt to re-path to the destination
-                path.setPath(null);
+                path.path = null;
                 break;
             }
         }
@@ -75,13 +75,13 @@ public class PathFollowingSystem extends IntervalIteratingSystem {
         if (directionComponents.has(entity)) {
             DirectionComponent directionComponent = directionComponents.get(entity);
             if (pos.pos.y < v2pos.y) {
-                directionComponent.setDirection(Direction.NORTH);
+                directionComponent.direction = Direction.NORTH;
             } else if (pos.pos.y > v2pos.y) {
-                directionComponent.setDirection(Direction.SOUTH);
+                directionComponent.direction = Direction.SOUTH;
             } else if (pos.pos.x < v2pos.x) {
-                directionComponent.setDirection(Direction.EAST);
+                directionComponent.direction = Direction.EAST;
             } else if (pos.pos.x > v2pos.x) {
-                directionComponent.setDirection(Direction.WEST);
+                directionComponent.direction = Direction.WEST;
             }
         }
 

@@ -21,7 +21,7 @@ public class FollowMousePositionSystem extends IteratingSystem {
     public void processEntity(Entity entity, float deltaTime) {
         MousePositionComponent mousePos = mouseComponents.get(entity);
         PositionComponent pos = posComponents.get(entity);
-        pos.pos.x = mousePos.pos.x;
-        pos.pos.y = mousePos.pos.y;
+        pos.pos.x = mousePos.getPos().x;
+        pos.pos.y = mousePos.getPos().y;
     }
 }

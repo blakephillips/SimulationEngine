@@ -30,8 +30,8 @@ public class MousePositionSystem extends IteratingSystem {
 
         v2pos = unprojectedMousePos();
 
-        mousePos.pos.x = v2pos.x;
-        mousePos.pos.y = v2pos.y;
+        mousePos.getPos().x = v2pos.x;
+        mousePos.getPos().y = v2pos.y;
     }
 
     public Vector2 unprojectedMousePos() {

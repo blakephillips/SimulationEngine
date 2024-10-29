@@ -35,13 +35,13 @@ public class TextRenderSystem extends IteratingSystem {
         TextComponent text = textComponents.get(entity);
 
         if (displayPosComponents.has(entity)) {
-            text.content = String.format("(%s, %s)", pos.pos.x, pos.pos.y);
+            text.setContent(String.format("(%s, %s)", pos.pos.x, pos.pos.y));
         }
 
         if (displayFpsComponents.has(entity)) {
-            text.content = String.format("FPS: %s", Gdx.app.getGraphics().getFramesPerSecond());
+            text.setContent(String.format("FPS: %s", Gdx.app.getGraphics().getFramesPerSecond()));
         }
 
-        font.draw(batch, text.content, pos.pos.x, pos.pos.y);
+        font.draw(batch, text.getContent(), pos.pos.x, pos.pos.y);
     }
 }

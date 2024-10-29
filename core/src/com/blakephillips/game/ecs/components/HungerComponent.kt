@@ -1,21 +1,14 @@
-package com.blakephillips.game.ecs.components;
+package com.blakephillips.game.ecs.components
 
-import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Component
 
-public class HungerComponent implements Component {
-    private int hungerValue;
-
-    public int getHunger() {
-        return hungerValue;
-    }
-
-    public void setHungerValue(int hungerValue) {
-        if (hungerValue > 100) {
-            this.hungerValue = 100;
-            return;
+class HungerComponent : Component {
+    var hunger = 0
+        set(value) {
+            if (value > 100) {
+                field = 100
+                return
+            }
+            field = value
         }
-
-        this.hungerValue = hungerValue;
-    }
-
 }

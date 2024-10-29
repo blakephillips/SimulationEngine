@@ -25,14 +25,14 @@ public class RenderSystem extends SortedIteratingSystem {
         PositionComponent pos = posComponents.get(entity);
         TextureComponent tex = texComponents.get(entity);
 
-        batch.draw(tex.region, pos.pos.x, pos.pos.y);
+        batch.draw(tex.getRegion(), pos.pos.x, pos.pos.y);
     }
 
     private static class ZComparator implements Comparator<Entity> {
         @Override
         public int compare(Entity entityA, Entity entityB) {
             ComponentMapper<TextureComponent> texComponents = ComponentMapper.getFor(TextureComponent.class);
-            return (int) Math.signum(texComponents.get(entityA).z - texComponents.get(entityB).z);
+            return (int) Math.signum(texComponents.get(entityA).getZ() - texComponents.get(entityB).getZ());
         }
     }
 }

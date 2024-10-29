@@ -83,7 +83,7 @@ public class HaulState extends State {
             return;
         }
 
-        this.pathComponent = new PathComponent(pathToHaulObject);
+        this.pathComponent = new PathComponent(pathToHaulObject, haulPosComponent.pos);
         entity.add(pathComponent);
         haulEntity.add(new ReservedComponent(entity));
         haulStatus = HaulStatus.TRAVELLING_TO_OBJECT;
@@ -119,7 +119,7 @@ public class HaulState extends State {
             }
 
             haulEntity.add(new SnapToPositionComponent(posComponent));
-            entity.add(new PathComponent(pathToDestination));
+            entity.add(new PathComponent(pathToDestination, haulToPosition));
             haulStatus = HaulStatus.HAULING_TO_DESTINATION;
         }
         //Validate we can reach the haul object

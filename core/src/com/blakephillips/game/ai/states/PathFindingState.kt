@@ -22,7 +22,7 @@ class PathFindingState(actor: Entity?, private var destination: Vector2) : State
         val positionComponent = posComponents[entity]
         val tileMap = Orchestrator.engine.getSystem(PathFollowingSystem::class.java).tileMap
         val vertexPath = Pathfinding.getPath(positionComponent.pos, destination, tileMap)
-        val pathComponent = PathComponent(vertexPath)
+        val pathComponent = PathComponent(vertexPath, destination)
         entity.add(pathComponent)
         setStateStatus(StateStatus.RUNNING)
     }

@@ -24,6 +24,6 @@ public class TextureDirectionSystem extends IteratingSystem {
         DirectionComponent directionComponent = directionComponents.get(entity);
         DirectionalTextureComponent directionalTextureComponent = directionalTexComponents.get(entity);
 
-        textureComponent.region = directionalTextureComponent.getTexture(directionComponent.getDirection());
+        textureComponent.setRegion(directionalTextureComponent.getTexture(directionComponent.direction));
     }
 }
