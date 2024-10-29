@@ -11,7 +11,7 @@ import com.blakephillips.game.data.UIState
 import com.blakephillips.game.ui.BoxSelection
 
 class InputSystem : EntitySystem() {
-    private var boxSelector = BoxSelection(Vector2(0f, 0f), ObjectType.CHARACTER)
+    private var boxSelector = BoxSelection(Vector2(0f, 0f), ObjectType.TREE)
     private val mouseSystem = Orchestrator.engine.getSystem(MousePositionSystem::class.java)
     override fun update(deltaTime: Float) {
 

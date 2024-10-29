@@ -8,10 +8,10 @@ import com.blakephillips.engine.ecs.components.ai.JobComponent
 import com.blakephillips.engine.utilities.datatype.Pair
 import com.blakephillips.game.Orchestrator
 import com.blakephillips.game.data.JobStatus
-import com.blakephillips.game.data.JobStatusUtility
 import com.blakephillips.game.data.JobType
+import com.blakephillips.game.data.isInProgress
 import com.blakephillips.game.ecs.components.JobTypeComponent
-import java.util.*
+import java.util.PriorityQueue
 
 class QueueSystem : EntitySystem() {
     private val queueMap = HashMap<JobType, PriorityQueue<Pair<Int, Entity>>>()
@@ -35,11 +35,10 @@ class QueueSystem : EntitySystem() {
     override fun update(deltaTime: Float) {
         for (assignableEntity in entities) {
             val currentJobComponent = currentJobComponents[assignableEntity]
+
             // if the current job is running / in any non-finished state, skip
-
             val status = currentJobComponent.currentJob?.status
-
-            if (status !== null && JobStatusUtility.isInProgress(status)) continue
+            if (status !== null && status.isInProgress()) continue
 
             currentJobComponent.currentJob = null
             for ((_, jobQueue) in queueMap) {
@@ -71,10 +70,9 @@ class QueueSystem : EntitySystem() {
         val jobComponent = jobComponents[entity]
         if (jobComponent.status != JobStatus.IDLE) {
             Gdx.app.debug(
-                "QueueSystem", String.format(
-                    "Job %s was added to engine not in idle state, " +
-                            "skipping adding to queue and deleting", jobComponent.name
-                )
+                "QueueSystem",
+                    "Job ${jobComponent.name} was added to engine not in idle state, " +
+                            "skipping adding to queue and deleting"
             )
             engine.removeEntity(entity)
             return

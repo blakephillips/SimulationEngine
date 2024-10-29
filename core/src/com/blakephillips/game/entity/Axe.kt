@@ -10,12 +10,14 @@ import com.blakephillips.game.data.ResourceType
 import com.blakephillips.game.ecs.components.ResourceComponent
 
 class Axe(initialPos: Vector2) {
-    val entity = Entity().also {
-        val positionComponent = PositionComponent(initialPos)
-        it.add(positionComponent)
-        val spr = SpriteSheet("sprites.png", 16, 16)
-        it.add(TextureComponent(spr.getTextureFromTileMap(0, 1), 0))
-        it.add(ResourceComponent(ResourceType.AXE))
-        Orchestrator.engine.addEntity(it)
+    val entity = Entity().apply {
+        add(PositionComponent(initialPos))
+        add(TextureComponent(axeTexture, 0))
+        add(ResourceComponent(ResourceType.AXE))
+        Orchestrator.engine.addEntity(this)
+    }
+    private companion object {
+        val sprites = SpriteSheet("sprites.png", 16, 16)
+        val axeTexture = sprites.getTextureFromTileMap(0, 1)
     }
 }

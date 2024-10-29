@@ -11,24 +11,26 @@ import com.blakephillips.game.data.ResourceType
 import com.blakephillips.game.ecs.components.*
 
 
-class Tree(initialPos: Vector2?) {
-    var pos: Vector2 = initialPos ?: Vector2(0F, 0F)
-    var entity = Entity().also {
+class Tree(initialPos: Vector2 = Vector2(0F, 0F)) {
+    val entity = Entity().apply {
+        val log = Entity().apply {
+            add(TextureComponent(logTexture, -1))
+            add(ResourceComponent(ResourceType.WOOD))
+        }
+        add(DropItemComponent(log))
+        add(PositionComponent(initialPos))
+        add(TextureComponent(treeTexture, 0))
+        add(SelectableComponent())
+        add(HarvestableComponent(false))
+        add(ObjectTypeComponent(ObjectType.TREE))
+        Orchestrator.engine.addEntity(this)
+    }
+
+    private companion object {
         val sprites = SpriteSheet("sprites.png", 16, 16)
-        val logTex = sprites.getTextureFromTileMap(0, 0)
-        val log = Entity()
-        log.add(TextureComponent(logTex, -1))
-        log.add(ResourceComponent(ResourceType.WOOD))
+        val tileset = SpriteSheet("tileset_grassland.png", 32, 48)
 
-
-        val positionComponent = PositionComponent(pos)
-        it.add(positionComponent)
-        val spr = SpriteSheet("tileset_grassland.png", 32, 48)
-        it.add(TextureComponent(spr.getTextureFromTileMap(1, 4), 0))
-        it.add(SelectableComponent())
-        it.add(HarvestableComponent(false))
-        it.add(ObjectTypeComponent(ObjectType.TREE))
-        it.add(DropItemComponent(log))
-        Orchestrator.engine.addEntity(it)
+        val logTexture = sprites.getTextureFromTileMap(0, 0)
+        val treeTexture = tileset.getTextureFromTileMap(1, 4)
     }
 }

@@ -22,13 +22,13 @@ import com.blakephillips.game.ecs.components.JobTypeComponent
 import com.blakephillips.game.ecs.components.ObjectTypeComponent
 import com.blakephillips.game.ecs.components.SelectableComponent
 
-class BoxSelection(private val startPos: Vector2, val selectionType: ObjectType?) {
+class BoxSelection(private val startPos: Vector2, private val selectionType: ObjectType?) {
     private val endPos = Vector2(startPos.x, startPos.y)
-    val selectedEntities: HashMap<Entity, Entity> = hashMapOf()
-    val box = Box(startPos, endPos)
-    var shapeComponent: ShapeComponent? = null
-    val entity: Entity = Entity()
-    var selectedTileRegion = TextureRegion(Texture(Gdx.files.internal("tile_selector.png")))
+    private val selectedEntities: HashMap<Entity, Entity> = hashMapOf()
+    private val box = Box(startPos, endPos)
+    private var shapeComponent: ShapeComponent? = null
+    private val entity: Entity = Entity()
+    private val selectedTileRegion = TextureRegion(Texture(Gdx.files.internal("tile_selector.png")))
 
     fun setStartPosition(x: Float, y: Float) {
         startPos.x = x
